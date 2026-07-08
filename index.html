@@ -1,0 +1,1156 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>낭만톡 - 영포티의 불타는 청춘 소통방</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@300;400;700;900&family=Nanum+Myeongjo:wght@400;700;800&family=Sunflower:wght@300;500;700&display=swap" rel="stylesheet">
+  
+  <style>
+    /* 영포티 감성의 세련된 폰트와 그라데이션 */
+    body {
+      font-family: 'Gothic A1', sans-serif;
+      background-color: #0b0f19;
+      background-image: 
+        radial-gradient(circle at 5% 15%, rgba(16, 185, 129, 0.08) 0%, transparent 35%),
+        radial-gradient(circle at 95% 85%, rgba(245, 158, 11, 0.08) 0%, transparent 35%);
+    }
+
+    .font-classic {
+      font-family: 'Nanum Myeongjo', serif;
+    }
+
+    .font-retro {
+      font-family: 'Sunflower', sans-serif;
+    }
+
+    /* 낭만적인 골드&에메랄드 글로우 효과 */
+    .glow-gold {
+      box-shadow: 0 0 20px rgba(245, 158, 11, 0.25);
+    }
+    .glow-emerald {
+      box-shadow: 0 0 20px rgba(16, 185, 129, 0.25);
+    }
+
+    /* LP판 회전 애니메이션 */
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    .spinning-lp {
+      animation: spin 8s linear infinite;
+    }
+    .spinning-lp-paused {
+      animation-play-state: paused;
+    }
+
+    /* 팝인 효과 */
+    .pop-in {
+      animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1) forwards;
+    }
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(0.95) translateY(10px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    /* 슬라이드 효과 */
+    .slide-in {
+      animation: slideIn 0.3s ease-out forwards;
+    }
+    @keyframes slideIn {
+      from { transform: translateX(30px); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+  </style>
+</head>
+<body class="min-h-screen text-slate-100 flex flex-col justify-between overflow-x-hidden selection:bg-amber-500 selection:text-slate-950">
+
+  <!-- ================= HEADER ================= -->
+  <header class="py-4 px-6 border-b border-slate-800 bg-slate-950/90 backdrop-blur-md sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto flex justify-between items-center">
+      <div class="flex items-center gap-3 cursor-pointer" onclick="navigate('home')">
+        <span class="text-3xl filter drop-shadow-md">🍷</span>
+        <div>
+          <h1 class="text-xl md:text-2xl font-retro font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-emerald-400">
+            낭만톡
+          </h1>
+          <p class="text-[10px] text-emerald-500 font-bold tracking-widest uppercase">Young Forty's Sweet Signal</p>
+        </div>
+      </div>
+      
+      <!-- 내 프로필 퀵뷰 -->
+      <div id="header-profile" class="hidden md:flex items-center gap-3 bg-slate-900/80 px-4 py-1.5 rounded-full border border-slate-800">
+        <span class="text-lg" id="header-avatar-emoji">🏕️</span>
+        <div class="text-left">
+          <div class="text-xs font-bold text-amber-400" id="header-nickname">푸른소나무_부장</div>
+          <p class="text-[9px] text-slate-400">마음은 20대 청춘 ⚡</p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ================= MAIN CONTENT ================= -->
+  <main class="flex-grow flex items-center justify-center p-4 md:p-6">
+    <div class="w-full max-w-4xl bg-slate-900/60 backdrop-blur-xl rounded-3xl border border-slate-800/80 shadow-2xl overflow-hidden min-h-[680px] flex flex-col md:flex-row relative">
+      
+      <!-- 1. LEFT SIDEBAR (네비게이션 및 미니 LP 플레이어) -->
+      <aside id="main-sidebar" class="hidden md:flex md:w-1/3 border-r border-slate-800/80 bg-slate-950/40 p-6 flex-col justify-between">
+        <div class="space-y-6">
+          <div class="p-4 bg-slate-900/50 rounded-2xl border border-slate-800">
+            <h3 class="text-xs font-bold text-emerald-400 uppercase tracking-widest mb-3"><i class="fa-solid fa-compass mr-1"></i> 청춘 채널 탐색</h3>
+            <nav class="space-y-2">
+              <button onclick="navigate('home')" id="nav-home" class="w-full text-left py-2.5 px-4 rounded-xl flex items-center gap-3 transition-all text-amber-400 bg-slate-800/80 font-bold border-l-4 border-amber-500">
+                <i class="fa-solid fa-house text-sm"></i> 홈 (청춘 광장)
+              </button>
+              <button onclick="navigate('chat-list')" id="nav-chat-list" class="w-full text-left py-2.5 px-4 rounded-xl flex items-center gap-3 transition-all text-slate-400 hover:text-slate-200 hover:bg-slate-900">
+                <i class="fa-solid fa-comments text-sm"></i> 1:1 대화방
+              </button>
+              <button onclick="navigate('converter')" id="nav-converter" class="w-full text-left py-2.5 px-4 rounded-xl flex items-center gap-3 transition-all text-slate-400 hover:text-slate-200 hover:bg-slate-900">
+                <i class="fa-solid fa-wand-magic-sparkles text-sm"></i> 영포티 말투 변환기
+              </button>
+              <button onclick="navigate('gatherings')" id="nav-gatherings" class="w-full text-left py-2.5 px-4 rounded-xl flex items-center gap-3 transition-all text-slate-400 hover:text-slate-200 hover:bg-slate-900">
+                <i class="fa-solid fa-users text-sm"></i> 등산/골프 모임 번개
+              </button>
+            </nav>
+          </div>
+
+          <!-- 미니 LP 플레이어 -->
+          <div class="p-4 bg-slate-900/50 rounded-2xl border border-slate-800 flex flex-col items-center text-center relative overflow-hidden">
+            <h4 class="text-xs font-bold text-slate-400 mb-3"><i class="fa-solid fa-music text-amber-500 mr-1.5"></i> 오늘의 청춘 주크박스</h4>
+            
+            <div class="relative w-24 h-24 mb-3">
+              <!-- LP판 자작 그래픽 -->
+              <div id="lp-disc" class="w-24 h-24 rounded-full bg-slate-950 flex items-center justify-center border-4 border-slate-800 spinning-lp spinning-lp-paused shadow-lg">
+                <div class="w-10 h-10 rounded-full bg-emerald-800 border-2 border-slate-950 flex items-center justify-center">
+                  <div class="w-2.5 h-2.5 rounded-full bg-amber-500"></div>
+                </div>
+              </div>
+              <div class="absolute -top-1 -right-1 text-xs animate-bounce" id="music-note" style="display:none;">🎵</div>
+            </div>
+
+            <div class="w-full">
+              <p id="now-playing-title" class="text-xs font-bold text-amber-400 truncate px-2">Toy - 좋은 사람 📻</p>
+              <p class="text-[10px] text-slate-500 mt-0.5">낭만 영포티 애창곡 리스트</p>
+            </div>
+
+            <div class="flex items-center gap-3 mt-4">
+              <button onclick="prevTrack()" class="text-slate-400 hover:text-white transition-colors text-xs"><i class="fa-solid fa-backward"></i></button>
+              <button onclick="toggleMusic()" id="lp-play-btn" class="w-8 h-8 rounded-full bg-amber-500 hover:bg-amber-600 text-slate-950 flex items-center justify-center shadow-md transition-all">
+                <i class="fa-solid fa-play ml-0.5"></i>
+              </button>
+              <button onclick="nextTrack()" class="text-slate-400 hover:text-white transition-colors text-xs"><i class="fa-solid fa-forward"></i></button>
+            </div>
+          </div>
+        </div>
+
+        <div class="text-[10px] text-slate-600 border-t border-slate-800/80 pt-4 text-center">
+          그 시절 낭만과 끈기,<br>마음은 늘 이팔청춘입니다..^^☕
+        </div>
+      </aside>
+
+      <!-- 2. RIGHT CONTENT AREA (실제 인터랙티브 라우팅 컨텐츠) -->
+      <section class="flex-grow flex flex-col justify-between w-full md:w-2/3 p-4 md:p-8 relative">
+
+        <!-- ================= PAGE 0: PROFILE SETTING (시작 페이지) ================= -->
+        <div id="page-profile" class="pop-in flex flex-col justify-center items-center h-full text-center py-6">
+          <div class="mb-3 bg-gradient-to-r from-emerald-500 to-amber-500 text-slate-950 font-bold text-xs uppercase px-4 py-1.5 rounded-full tracking-wider font-retro">
+            마음은 언제나 청년 ⚡
+          </div>
+          
+          <h2 class="text-3xl md:text-4xl font-classic font-bold leading-snug mb-3 tracking-tight mt-2 text-transparent bg-clip-text bg-gradient-to-r from-amber-100 via-amber-400 to-emerald-300">
+            당신의 청춘 아바타를<br>깨워보세요...^^✨
+          </h2>
+          
+          <p class="text-xs md:text-sm text-slate-400 mb-8 max-w-sm leading-relaxed font-light">
+            영포티 소통의 세계 '낭만톡'에 오신 것을 환영합니다!<br>
+            그때 그 시절 열정과 유쾌함을 나눌 부캐를 설정해 주세요.
+          </p>
+
+          <!-- 아바타 설정 폼 -->
+          <div class="w-full max-w-sm bg-slate-950/50 p-6 rounded-2xl border border-slate-800 space-y-4 mb-6 text-left">
+            <div>
+              <label class="block text-xs font-bold text-amber-400 mb-2">🏷️ 닉네임 정하기 (영포티 취향 저격)</label>
+              <div class="flex gap-2">
+                <input type="text" id="input-nickname" placeholder="예: 들꽃사랑_부장" class="flex-grow bg-slate-900 border border-slate-800 focus:border-amber-500 rounded-xl px-4 py-2.5 text-sm text-slate-200 outline-none transition-all">
+                <button onclick="generateRandomNickname()" class="px-3 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-bold rounded-xl text-amber-400 transition-all flex items-center gap-1">
+                  <i class="fa-solid fa-wand-magic-sparkles"></i> 추천
+                </button>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-amber-400 mb-2">🧭 나의 메인 관심사</label>
+              <div class="grid grid-cols-2 gap-2">
+                <button onclick="selectInterest('mountain', '⛰️ 등산&야외')" id="interest-mountain" class="interest-btn py-2 px-3 rounded-xl bg-slate-900 border border-slate-800 text-xs text-slate-300 hover:border-amber-500/50 text-left flex items-center gap-2 transition-all">
+                  <span>⛰️</span> 등산 & 야외활동
+                </button>
+                <button onclick="selectInterest('golf', '🏌️‍♂️ 필드&스크린')" id="interest-golf" class="interest-btn py-2 px-3 rounded-xl bg-slate-900 border border-slate-800 text-xs text-slate-300 hover:border-amber-500/50 text-left flex items-center gap-2 transition-all">
+                  <span>🏌️‍♂️</span> 필드 & 스크린 골프
+                </button>
+                <button onclick="selectInterest('wine', '🍷 감성 와인&LP')" id="interest-wine" class="interest-btn py-2 px-3 rounded-xl bg-slate-900 border border-slate-800 text-xs text-slate-300 hover:border-amber-500/50 text-left flex items-center gap-2 transition-all">
+                  <span>🍷</span> 감성 와인 & LP바
+                </button>
+                <button onclick="selectInterest('camping', '🏕️ 차박&캠핑')" id="interest-camping" class="interest-btn py-2 px-3 rounded-xl bg-slate-900 border border-slate-800 text-xs text-slate-300 hover:border-amber-500/50 text-left flex items-center gap-2 transition-all">
+                  <span>🏕️</span> 차박 & 감성 캠핑
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <button onclick="saveProfileAndStart()" class="w-full max-w-sm py-4 bg-gradient-to-r from-amber-500 to-emerald-600 hover:from-amber-600 hover:to-emerald-700 text-slate-950 font-bold rounded-2xl shadow-lg active:scale-95 transition-all text-center glow-gold">
+            청춘 광장으로 입장하기 <i class="fa-solid fa-arrow-right ml-1"></i>
+          </button>
+        </div>
+
+
+        <!-- ================= PAGE 1: HOME (청춘 광장 - 대시보드) ================= -->
+        <div id="page-home" class="hidden pop-in space-y-6">
+          <div class="flex justify-between items-center">
+            <div>
+              <h2 class="text-2xl font-classic font-bold text-slate-100">오늘도 힘차게 파이팅입니다! 👍</h2>
+              <p class="text-xs text-emerald-400 font-medium">청춘 광장 대시보드 ☕</p>
+            </div>
+            <span class="text-3xl animate-pulse">🌞</span>
+          </div>
+
+          <!-- 환영 배너 -->
+          <div class="bg-gradient-to-r from-emerald-950/80 to-slate-950/80 p-5 rounded-2xl border border-emerald-500/20 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div class="space-y-1">
+              <h4 class="text-sm font-bold text-amber-400 flex items-center gap-1.5">
+                📢 영포티 낭만 명언 한구절..^^
+              </h4>
+              <p class="text-xs text-slate-300 font-light leading-relaxed">
+                "나이는 숫자에 불과할 뿐, 가슴속 타오르는 불꽃은 아무도 끄지 못합니다. 오늘도 활기차게 시그널을 보내보시지요..!!"
+              </p>
+            </div>
+          </div>
+
+          <!-- 서비스 바로가기 그리드 -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            
+            <!-- 1:1 대화방 이동 카드 -->
+            <div onclick="navigate('chat-list')" class="p-5 bg-slate-950/40 hover:bg-slate-950 border border-slate-800 hover:border-amber-500/50 rounded-2xl cursor-pointer transition-all group">
+              <div class="flex justify-between items-start mb-3">
+                <span class="text-2xl group-hover:scale-110 transition-transform">💬</span>
+                <span class="text-[10px] text-amber-400 font-bold bg-amber-500/10 px-2 py-0.5 rounded-full">3명의 메이트 대기 중</span>
+              </div>
+              <h4 class="font-bold text-sm text-slate-200 group-hover:text-amber-300 transition-colors">1:1 낭만 대화 나누기</h4>
+              <p class="text-xs text-slate-400 mt-1 leading-relaxed font-light">
+                주말 등산 동반자 민우 부장, 캠핑 덕후 혜경 차장, 아날로그 LP바 사장 정훈이와 실시간 대화를 즐겨보세요!
+              </p>
+            </div>
+
+            <!-- 말투 변환기 카드 -->
+            <div onclick="navigate('converter')" class="p-5 bg-slate-950/40 hover:bg-slate-950 border border-slate-800 hover:border-emerald-500/50 rounded-2xl cursor-pointer transition-all group">
+              <div class="flex justify-between items-start mb-3">
+                <span class="text-2xl group-hover:scale-110 transition-transform">🪄</span>
+                <span class="text-[10px] text-emerald-400 font-bold bg-emerald-500/10 px-2 py-0.5 rounded-full">말투 자동 튜닝</span>
+              </div>
+              <h4 class="font-bold text-sm text-slate-200 group-hover:text-emerald-300 transition-colors">영포티 말투 변환기</h4>
+              <p class="text-xs text-slate-400 mt-1 leading-relaxed font-light">
+                딱딱한 요즘 MZ 단답형 글씨체를 정겹고 정성이 가득 담긴 영포티 소울 스타일로 한방에 업그레이드!
+              </p>
+            </div>
+
+            <!-- 번개 모임 카드 -->
+            <div onclick="navigate('gatherings')" class="p-5 bg-slate-950/40 hover:bg-slate-950 border border-slate-800 hover:border-emerald-500/50 rounded-2xl cursor-pointer transition-all group">
+              <div class="flex justify-between items-start mb-3">
+                <span class="text-2xl group-hover:scale-110 transition-transform">⛰️</span>
+                <span class="text-[10px] text-slate-300 font-bold bg-slate-800 px-2 py-0.5 rounded-full">이번 주말 번개 모집</span>
+              </div>
+              <h4 class="font-bold text-sm text-slate-200 group-hover:text-emerald-300 transition-colors">등산 & 골프 번개 소모임</h4>
+              <p class="text-xs text-slate-400 mt-1 leading-relaxed font-light">
+                혼자 가면 고독하지만 둘이 가면 낭만적인 주말 둘레길 산행과 스크린 골프 번개에 참여해보세요.
+              </p>
+            </div>
+
+            <!-- 오늘의 주크박스 모바일 퀵뷰 -->
+            <div onclick="toggleMusic();" class="p-5 bg-slate-950/40 hover:bg-slate-950 border border-slate-800 hover:border-amber-500/50 rounded-2xl cursor-pointer transition-all group md:hidden">
+              <div class="flex justify-between items-start mb-3">
+                <span class="text-2xl" id="mob-lp-icon">📻</span>
+                <span class="text-[10px] text-amber-400 font-bold bg-amber-500/10 px-2 py-0.5 rounded-full">원터치 뮤직</span>
+              </div>
+              <h4 class="font-bold text-sm text-slate-200" id="mob-playing-text">90년대 명곡 라디오 (정지됨)</h4>
+              <p class="text-xs text-slate-400 mt-1 leading-relaxed font-light">
+                귀를 편안하게 해주는 그 시절 아름다운 멜로디와 연주곡들을 잔잔히 흘려 보냅니다..^^☕
+              </p>
+            </div>
+
+          </div>
+        </div>
+
+
+        <!-- ================= PAGE 2: CHAT LIST (1:1 메이트 목록) ================= -->
+        <div id="page-chat-list" class="hidden pop-in space-y-6 h-full flex flex-col justify-start">
+          <div>
+            <h2 class="text-2xl font-classic font-bold text-slate-100">소중한 인연과의 따뜻한 대화방 ✨</h2>
+            <p class="text-xs text-amber-400 font-medium">영포티 맞춤 AI 카운셀러 및 대화 상대</p>
+          </div>
+
+          <div class="space-y-4 flex-grow overflow-y-auto max-h-[500px] pr-2" id="chat-mates-container">
+            <!-- 메이트 1: 민우 부장 -->
+            <div onclick="startChatSession('minwoo')" class="flex items-center justify-between p-4 bg-slate-950/50 hover:bg-slate-950 border border-slate-800/80 hover:border-amber-500/60 rounded-2xl cursor-pointer transition-all">
+              <div class="flex items-center gap-4">
+                <div class="w-12 h-12 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/30 flex items-center justify-center text-2xl">
+                  🏌️‍♂️
+                </div>
+                <div class="text-left">
+                  <div class="flex items-center gap-1.5">
+                    <span class="font-bold text-slate-100 text-sm">민우 부장 (43)</span>
+                    <span class="text-[9px] bg-emerald-500/10 text-emerald-400 font-bold px-1.5 py-0.5 rounded">온라인</span>
+                  </div>
+                  <p class="text-xs text-slate-400 font-light mt-1 truncate max-w-[200px] md:max-w-xs">
+                    "오늘도 파이팅입니다!^^ 주말에 골프 한 겜 치셔야죠..?"
+                  </p>
+                </div>
+              </div>
+              <span class="text-xs text-slate-500 flex items-center gap-1">
+                대화하기 <i class="fa-solid fa-chevron-right text-[10px]"></i>
+              </span>
+            </div>
+
+            <!-- 메이트 2: 혜경 차장 -->
+            <div onclick="startChatSession('hyekyoung')" class="flex items-center justify-between p-4 bg-slate-950/50 hover:bg-slate-950 border border-slate-800/80 hover:border-emerald-500/60 rounded-2xl cursor-pointer transition-all">
+              <div class="flex items-center gap-4">
+                <div class="w-12 h-12 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 flex items-center justify-center text-2xl">
+                  🏕️
+                </div>
+                <div class="text-left">
+                  <div class="flex items-center gap-1.5">
+                    <span class="font-bold text-slate-100 text-sm">혜경 차장 (41)</span>
+                    <span class="text-[9px] bg-emerald-500/10 text-emerald-400 font-bold px-1.5 py-0.5 rounded">온라인</span>
+                  </div>
+                  <p class="text-xs text-slate-400 font-light mt-1 truncate max-w-[200px] md:max-w-xs">
+                    "안녕하세요~☕ 요즘 캠핑 가기 딱 좋은 선선한 날씨네요..!"
+                  </p>
+                </div>
+              </div>
+              <span class="text-xs text-slate-500 flex items-center gap-1">
+                대화하기 <i class="fa-solid fa-chevron-right text-[10px]"></i>
+              </span>
+            </div>
+
+            <!-- 메이트 3: 정훈 LP바 사장 -->
+            <div onclick="startChatSession('junghoon')" class="flex items-center justify-between p-4 bg-slate-950/50 hover:bg-slate-950 border border-slate-800/80 hover:border-amber-500/60 rounded-2xl cursor-pointer transition-all">
+              <div class="flex items-center gap-4">
+                <div class="w-12 h-12 rounded-full bg-purple-500/10 text-purple-400 border border-purple-500/30 flex items-center justify-center text-2xl">
+                  📻
+                </div>
+                <div class="text-left">
+                  <div class="flex items-center gap-1.5">
+                    <span class="font-bold text-slate-100 text-sm">정훈 LP 사장 (45)</span>
+                    <span class="text-[9px] bg-emerald-500/10 text-emerald-400 font-bold px-1.5 py-0.5 rounded">온라인</span>
+                  </div>
+                  <p class="text-xs text-slate-400 font-light mt-1 truncate max-w-[200px] md:max-w-xs">
+                    "크으, 인생 뭐 있겠습니까.. 편안한 음악 한 자락 깔고 맥주 한 잔 하세요..^^"
+                  </p>
+                </div>
+              </div>
+              <span class="text-xs text-slate-500 flex items-center gap-1">
+                대화하기 <i class="fa-solid fa-chevron-right text-[10px]"></i>
+              </span>
+            </div>
+
+          </div>
+        </div>
+
+
+        <!-- ================= PAGE 3: CHAT ROOM (개별 대화방) ================= -->
+        <div id="page-chat-room" class="hidden pop-in flex flex-col justify-between h-full min-h-[580px]">
+          <!-- 상단 헤더 -->
+          <div class="flex justify-between items-center pb-4 border-b border-slate-800/80">
+            <button onclick="navigate('chat-list')" class="text-xs text-slate-400 hover:text-slate-100 flex items-center gap-1.5 transition-all">
+              <i class="fa-solid fa-chevron-left text-[10px]"></i> 목록으로
+            </button>
+            <div class="text-center">
+              <h3 class="font-bold text-sm text-slate-100" id="chatroom-mate-name">민우 부장 (43)</h3>
+              <p class="text-[9px] text-emerald-400" id="chatroom-mate-status">실시간 마음의 소리 연결 중..</p>
+            </div>
+            <!-- 아재 드립 번개 찬스 단추 -->
+            <button onclick="requestDripJoke()" class="px-2.5 py-1 bg-amber-500/10 hover:bg-amber-500 text-amber-400 hover:text-slate-950 border border-amber-500/30 rounded-lg text-[10px] font-bold transition-all">
+              ⚡ 유머 치기
+            </button>
+          </div>
+
+          <!-- 말풍선 영역 -->
+          <div id="chat-messages-box" class="flex-grow overflow-y-auto py-4 space-y-4 my-2 max-h-[400px] pr-2">
+            <!-- 동적 삽입 -->
+          </div>
+
+          <!-- 하단 입력 영역 -->
+          <div class="space-y-2 pt-2 border-t border-slate-800/80">
+            <div class="flex gap-2">
+              <input type="text" id="chat-user-input" placeholder="정성이 담긴 답장을 보내보세요...^^☕" onkeypress="handleChatEnter(event)" class="flex-grow bg-slate-950 border border-slate-800 focus:border-amber-500 rounded-xl px-4 py-3 text-xs text-slate-200 outline-none transition-all">
+              
+              <button onclick="sendChatMessage()" class="bg-gradient-to-r from-amber-500 to-emerald-600 hover:from-amber-600 hover:to-emerald-700 text-slate-950 font-bold px-5 py-3 rounded-xl text-xs flex items-center gap-1 transition-all">
+                전송 <i class="fa-solid fa-paper-plane text-[10px]"></i>
+              </button>
+            </div>
+            <div class="flex justify-between items-center px-1 text-[10px] text-slate-500">
+              <span>💡 문장 끝에 '^^'나 '...'을 붙이면 대화 온도가 상승합니다..^^</span>
+              <button onclick="convertInputToForty()" class="hover:text-amber-400 transition-colors font-bold"><i class="fa-solid fa-wand-magic-sparkles mr-1 text-amber-500"></i> 내 문장을 영포티체로 변환하기</button>
+            </div>
+          </div>
+        </div>
+
+
+        <!-- ================= PAGE 4: TRANSLATOR (말투 변환기) ================= -->
+        <div id="page-converter" class="hidden pop-in space-y-6">
+          <div>
+            <h2 class="text-2xl font-classic font-bold text-slate-100">영포티 말투 자동 변환기 🪄</h2>
+            <p class="text-xs text-emerald-400 font-medium">따뜻함과 격려를 한껏 머금은 친근한 메시지 변환</p>
+          </div>
+
+          <div class="space-y-4 bg-slate-950/40 p-5 rounded-2xl border border-slate-800">
+            <div>
+              <label class="block text-xs font-bold text-slate-400 mb-2">원래 하려던 말 (요즘 인싸/MZ식 또는 무미건조한 텍스트)</label>
+              <textarea id="convert-input" placeholder="예: '오늘 점심 뭐 먹음? 나 귀찮아서 그냥 대충 때움...'" class="w-full h-24 bg-slate-900 border border-slate-800 focus:border-amber-500 rounded-xl p-4 text-xs text-slate-200 outline-none resize-none transition-all"></textarea>
+            </div>
+
+            <!-- 변환 선택 옵션 -->
+            <div class="flex flex-wrap gap-2">
+              <button onclick="translateSpeech('friendly')" class="py-2 px-3 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-amber-500/50 text-xs text-amber-400 font-bold flex items-center gap-1 transition-all">
+                😊 정감 가득한 형/오빠 바이브
+              </button>
+              <button onclick="translateSpeech('cheer')" class="py-2 px-3 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-emerald-500/50 text-xs text-emerald-400 font-bold flex items-center gap-1 transition-all">
+                ✊ 격정 응원 파이팅 바이브
+              </button>
+              <button onclick="translateSpeech('wise')" class="py-2 px-3 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-purple-500/50 text-xs text-purple-400 font-bold flex items-center gap-1 transition-all">
+                ☕ 차분하고 낭만적인 인생 커피체
+              </button>
+            </div>
+
+            <div class="pt-4 border-t border-slate-800/80">
+              <label class="block text-xs font-bold text-amber-400 mb-2">✨ 영포티 낭만으로 재탄생한 결과물</label>
+              <div class="relative">
+                <div id="convert-output" class="w-full min-h-[90px] bg-slate-900 border border-emerald-500/20 rounded-xl p-4 text-xs text-slate-100 font-medium leading-relaxed whitespace-pre-wrap">
+                  위에서 옵션을 선택하시면 따스한 낭만어로 즉각 탈바꿈해 드립니다..^^☕
+                </div>
+                <!-- 카피 버튼 -->
+                <button onclick="copyConvertedText()" class="absolute top-2.5 right-2.5 w-8 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 flex items-center justify-center text-xs transition-all border border-slate-700 hover:border-amber-500">
+                  <i class="fa-solid fa-copy"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <!-- ================= PAGE 5: GATHERINGS (소모임 번개) ================= -->
+        <div id="page-gatherings" class="hidden pop-in space-y-6">
+          <div class="flex justify-between items-center">
+            <div>
+              <h2 class="text-2xl font-classic font-bold text-slate-100">청춘 번개 소모임 ⛰️</h2>
+              <p class="text-xs text-emerald-400 font-medium">따스한 바람 따라 건강도 챙기고 인연도 쌓는 일상 모임</p>
+            </div>
+            <!-- 모임 만들기 버튼 -->
+            <button onclick="openCreateGatheringModal()" class="py-1.5 px-3 bg-gradient-to-r from-amber-500 to-emerald-600 text-slate-950 text-xs font-bold rounded-lg hover:from-amber-600 hover:to-emerald-700 transition-all flex items-center gap-1">
+              <i class="fa-solid fa-circle-plus"></i> 번개 만들기
+            </button>
+          </div>
+
+          <!-- 번개 모임 리스트 -->
+          <div class="space-y-4 overflow-y-auto max-h-[500px] pr-1" id="gatherings-list-box">
+            <!-- 모임 1 -->
+            <div class="p-5 bg-slate-950/50 border border-slate-800/80 rounded-2xl space-y-3.5 relative overflow-hidden">
+              <div class="flex justify-between items-start">
+                <span class="px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-[10px] text-emerald-400 font-bold">주말 등산 산악회</span>
+                <span class="text-xs text-slate-500"><i class="fa-solid fa-user-group mr-1"></i> 현재 5명 참가</span>
+              </div>
+              <div>
+                <h4 class="font-bold text-sm text-slate-100">🌿 주말 북한산 둘레길 상쾌한 도보여행 번개 가실 분..^^ 🌿</h4>
+                <p class="text-xs text-slate-400 mt-1 leading-relaxed font-light">
+                  일요일 오전 9시 입구 집결입니다! 가벼운 등산화와 가방에 오이 한 개씩 챙겨 오시지요.. 하하! 정상 등반 후 맛있는 도토리묵에 동동주 한 사발 같이 들이킬 소중한 청춘분들 대환영합니다!👍
+                </p>
+              </div>
+              <div class="flex justify-between items-center pt-3 border-t border-slate-900">
+                <div class="text-[10px] text-slate-500">
+                  <span class="text-amber-500 font-bold">주최:</span> 청산_부장님
+                </div>
+                <button onclick="joinGathering(this, '🌿 북한산 둘레길 번개')" class="py-1.5 px-4 bg-amber-500 text-slate-950 text-xs font-bold rounded-lg hover:bg-amber-600 active:scale-95 transition-all">
+                  참가 신청 <i class="fa-solid fa-check ml-0.5"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- 모임 2 -->
+            <div class="p-5 bg-slate-950/50 border border-slate-800/80 rounded-2xl space-y-3.5 relative overflow-hidden">
+              <div class="flex justify-between items-start">
+                <span class="px-2.5 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-[10px] text-amber-400 font-bold">스크린 골프 동호회</span>
+                <span class="text-xs text-slate-500"><i class="fa-solid fa-user-group mr-1"></i> 현재 3명 참가</span>
+              </div>
+              <div>
+                <h4 class="font-bold text-sm text-slate-100">🏌️‍♂️ 퇴근 길 깔끔하게 골프존 18홀 한판 어떠신지요~^^ 🏌️‍♂️</h4>
+                <p class="text-xs text-slate-400 mt-1 leading-relaxed font-light">
+                  수요일 저녁 7시 마포 부근 스크린방 2개 빌렸습니다.. 내기는 만원짜리 저녁 사기! 왕초보 분들도 환영합니다. 서로 부드럽게 원포인트 레슨도 나누고 맥주 한 캔 곁들이면서 친목 다져 보시지요~!! 파이팅입니다!✊
+                </p>
+              </div>
+              <div class="flex justify-between items-center pt-3 border-t border-slate-900">
+                <div class="text-[10px] text-slate-500">
+                  <span class="text-amber-500 font-bold">주최:</span> 싱글파더_민우
+                </div>
+                <button onclick="joinGathering(this, '🏌️‍♂️ 스크린 골프 번개')" class="py-1.5 px-4 bg-amber-500 text-slate-950 text-xs font-bold rounded-lg hover:bg-amber-600 active:scale-95 transition-all">
+                  참가 신청 <i class="fa-solid fa-check ml-0.5"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- 모임 3 -->
+            <div class="p-5 bg-slate-950/50 border border-slate-800/80 rounded-2xl space-y-3.5 relative overflow-hidden">
+              <div class="flex justify-between items-start">
+                <span class="px-2.5 py-0.5 rounded-full bg-purple-500/10 border border-purple-500/30 text-[10px] text-purple-400 font-bold">LP바 & 감성 와인</span>
+                <span class="text-xs text-slate-500"><i class="fa-solid fa-user-group mr-1"></i> 현재 4명 참가</span>
+              </div>
+              <div>
+                <h4 class="font-bold text-sm text-slate-100">🍷 비오는 불금, 신촌 단골 LP바에서 추억 여행 가실 분..^^ 🍷</h4>
+                <p class="text-xs text-slate-400 mt-1 leading-relaxed font-light">
+                  토이, 윤종신, 전람회 음악 귀가 닳도록 들으면서 자란 청춘들 모이십시다... 맥주 한 잔, 와인 한 모금 홀짝이며 신청곡 적은 종이 dj 부스에 찔러 넣던 그 맛, 아직 잊지 않으셨지요..? 소소한 수다 환영해요~ 📻
+                </p>
+              </div>
+              <div class="flex justify-between items-center pt-3 border-t border-slate-900">
+                <div class="text-[10px] text-slate-500">
+                  <span class="text-amber-500 font-bold">주최:</span> 아날로그의정수
+                </div>
+                <button onclick="joinGathering(this, '🍷 신촌 LP바 번개')" class="py-1.5 px-4 bg-amber-500 text-slate-950 text-xs font-bold rounded-lg hover:bg-amber-600 active:scale-95 transition-all">
+                  참가 신청 <i class="fa-solid fa-check ml-0.5"></i>
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </section>
+    </div>
+  </main>
+
+  <!-- ================= MODALS & TOASTS ================= -->
+  
+  <!-- 번개 만들기 모달 -->
+  <div id="modal-gathering" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4 animate-fade-in">
+    <div class="bg-slate-900 border border-slate-800 w-full max-w-md rounded-3xl p-6 relative">
+      <button onclick="closeCreateGatheringModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white text-xl">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+      
+      <div class="flex items-center gap-2 mb-4">
+        <span class="text-2xl">🔥</span>
+        <div>
+          <h4 class="font-retro text-base text-slate-100 font-bold">나만의 낭만 번개 만들기</h4>
+          <p class="text-[10px] text-emerald-400">함께할 때 낭만이 배가 되는 신나는 사교 소모임</p>
+        </div>
+      </div>
+
+      <div class="space-y-4">
+        <div>
+          <label class="block text-xs font-bold text-amber-400 mb-1.5">📌 모임 이름 (자연스럽게 '..^^'를 붙여보세요)</label>
+          <input type="text" id="g-title" placeholder="예: 목요일 저녁 막걸리 한 사발 어떠신가요..^^" class="w-full bg-slate-950 border border-slate-800 focus:border-amber-500 rounded-xl px-4 py-2.5 text-xs text-slate-200 outline-none transition-all">
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-amber-400 mb-1.5">📂 카테고리</label>
+          <select id="g-category" class="w-full bg-slate-950 border border-slate-800 focus:border-amber-500 rounded-xl px-3 py-2.5 text-xs text-slate-200 outline-none transition-all">
+            <option value="산악회">⛰️ 등산 산악회 번개</option>
+            <option value="골프">🏌️‍♂️ 스크린 골프 번개</option>
+            <option value="와인">🍷 lp바 & 감성 와인 번개</option>
+            <option value="기타">☕ 가벼운 티타임 수다 번개</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-amber-400 mb-1.5">📝 모임 상세 설명 (정감 가득하게 작성)</label>
+          <textarea id="g-desc" placeholder="모임 시간, 장소, 준비물과 영포티 특유의 부드럽고 따뜻한 인사를 남겨 보세요..^^" class="w-full h-24 bg-slate-950 border border-slate-800 focus:border-amber-500 rounded-xl p-3 text-xs text-slate-200 outline-none resize-none transition-all"></textarea>
+        </div>
+
+        <button onclick="submitNewGathering()" class="w-full py-3 bg-gradient-to-r from-amber-500 to-emerald-600 hover:from-amber-600 hover:to-emerald-700 text-slate-950 font-bold rounded-xl text-xs shadow-md active:scale-95 transition-all">
+          모임 등록하기 🚀
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 알림 토스트 팝업 -->
+  <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 bg-slate-950/90 border border-slate-800 text-slate-100 py-3.5 px-6 rounded-full text-xs shadow-2xl flex items-center gap-2 transform translate-y-24 opacity-0 transition-all duration-300 z-50">
+    <span id="toast-icon">☕</span> <span id="toast-msg">복사 완료!</span>
+  </div>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="py-5 px-6 border-t border-slate-950 bg-slate-950/80 text-center text-[11px] text-slate-600">
+    <div class="max-w-6xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-2">
+      <p>© 2026 낭만톡 컴퍼니. 마음만은 이팔청춘인 모든 청춘들을 응원합니다.</p>
+      <div class="flex gap-4">
+        <a href="#" onclick="showToast('정식 서비스 준비 중입니다..^^'); return false;" class="hover:text-amber-500 transition-all">이용약관</a>
+        <a href="#" onclick="showToast('개인정보는 절대 안전 보관됩니다..^^'); return false;" class="hover:text-amber-500 transition-all">개인정보처리방침</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ================= JAVASCRIPT LOGIC ================= -->
+  <script>
+    // -----------------------------------------
+    // 1. GLOBAL STATE & CONFIG
+    // -----------------------------------------
+    let userProfile = {
+      nickname: "",
+      interest: "",
+      interestLabel: ""
+    };
+
+    let activeTab = "profile"; // 'profile', 'home', 'chat-list', 'chat-room', 'converter', 'gatherings'
+    let currentMate = null; // 'minwoo', 'hyekyoung', 'junghoon'
+    let lpPlaying = false;
+    let currentTrackIdx = 0;
+
+    const appId = typeof __app_id !== 'undefined' ? __app_id : 'romantic-forty-chat';
+    const apiKey = ""; // API Key
+
+    // 90년대 감성 명곡 가상 리스트
+    const jukeboxList = [
+      { title: "토이 - 좋은 사람 📻", emoji: "📻" },
+      { title: "전람회 - 기억의 습작 ✍️", emoji: "✍️" },
+      { title: "이적 - 다행이다 💕", emoji: "💕" },
+      { title: "윤종신 - 오르막길 ⛰️", emoji: "⛰️" },
+      { title: "조규만 - 다 줄거야 🎁", emoji: "🎁" }
+    ];
+
+    // 영포티 랜덤 닉네임 후보군
+    const randomNicknames = [
+      "들꽃_사랑", "청산_부장", "은빛날개_과장", "빛나는청춘", "낭만가객_차장",
+      "초록들판_대표", "도심속캠퍼", "새벽이슬_과장", "골프는인생", "바람꽃향기"
+    ];
+
+    // 대화방 데이터 구조
+    const chatMatesData = {
+      minwoo: {
+        name: "민우 부장 (43)",
+        emoji: "🏌️‍♂️",
+        initialMsg: "반갑습니다~! 오늘 날씨 참 좋지요?^^ 이번 주말 골프 라운딩이나 등산 약속 없으시면 저랑 소소한 수다나 떨어 보시지요.. 하하!",
+        systemPrompt: "너는 43세의 대기업 부장 '민우'다. 주말 골프와 산행을 진심으로 좋아한다. 질문자에게 매우 친절하고 인자한 직장 선배 혹은 형/오빠 같은 느낌으로 든든하게 조언해라. 말투는 문장 끝에 반드시 '~^^', '...ㅎㅎ', '👍'를 자주 사용하고 가끔 썰렁하지만 훈훈한 아재개그를 던지며 질문자를 챙겨줘라.",
+        drips: [
+          "세상에서 가장 가난한 왕은? 바로 '설해원'입니다.. 하하하!^^ (속초 골프장 유머)",
+          "오늘도 활기차게 나이스 샷~! 인생의 드라이버 샷 한 번 시원하게 날려 보시지요..!!👍"
+        ]
+      },
+      hyekyoung: {
+        name: "혜경 차장 (41)",
+        emoji: "🏕️",
+        initialMsg: "안녕하세요~^^☕ 날씨가 점점 캠핑하기 아주 딱 좋은 날씨가 되네요. 일상에 지쳐 마음에 휴식이 필요하실 때 언제든 낭만 가득한 모닥불 수다 나누러 오세요~",
+        systemPrompt: "너는 41세의 커리어우먼이자 감성 캠핑 매니아 '혜경 차장'이다. 필라테스와 캠핑을 즐기며 따뜻하고 섬세한 성격을 가졌다. 질문자에게 따뜻한 누나/언니처럼 편안한 상담소 역할을 자처하며 인생 꿀팁을 다정하게 전해줘라. 말투는 문장 끝에 '☕', '~', '~^^', '..!'를 조화롭게 섞어 쓰며, 오버하지 않고 우아하고 차분한 무드를 유지해라.",
+        drips: [
+          "인생이라는 캠핑장에서 가장 든든한 텐트는 바로 '당신의 마음'입니다..^^ 오늘도 활짝 웃으시길~🌸",
+          "캠핑 가서는 불멍이 최고지요... 제 마음도 당신의 고민 소리에 사르르 녹아내리는 듯합니다..ㅎㅎ"
+        ]
+      },
+      junghoon: {
+        name: "정훈 LP 사장 (45)",
+        emoji: "📻",
+        initialMsg: "오셨군요..^^ 날도 쌀쌀한데 여기 LP바 단골 지정석에 앉아보세요. 마음이 노곤노곤해지는 추억 가득한 김동률의 '기억의 습작' 한 자락 얹어 드리겠습니다.. 들이켜 보시지요.",
+        systemPrompt: "너는 45세의 아날로그 LP 레코드바 사장 '정훈'이다. 90년대 가요와 맥주, 고독을 좋아하는 로맨티스트다. 질문자에게 친한 동네 편한 형/삼촌처럼 시크하면서도 인생의 깊이가 느껴지는 소탈하고 가슴 먹먹한 위로와 조언을 전해줘라. 말투는 문장 끝에 항상 말줄임표 '...' 또는 '...^^', '..ㅎㅎ'를 사용하여 은은한 쓸쓸함과 따스함을 연출해라.",
+        drips: [
+          "맥주 한 모금에 흘려보내는 추억의 멜로디... 크으, 취하네요.. 오늘 밤 주인공은 당신입니다..^^",
+          "옛날 생각이 많이 나는 가을 밤이군요... 편안하게 눈을 감고 소중한 그 시절의 나를 안아주세요..ㅎㅎ"
+        ]
+      }
+    };
+
+    // 대화 히스토리 상태 메모리
+    let chatHistories = {
+      minwoo: [],
+      hyekyoung: [],
+      junghoon: []
+    };
+
+    // -----------------------------------------
+    // 2. LIFECYCLE & ROUTING
+    // -----------------------------------------
+    window.onload = function() {
+      // 초기 주크박스 셋업
+      updateJukeboxUI();
+      // 프로필 세팅화면 자동 활성
+      navigate('profile');
+    };
+
+    function navigate(tabName) {
+      activeTab = tabName;
+      
+      // 전체 탭 리스트
+      const pages = ['profile', 'home', 'chat-list', 'chat-room', 'converter', 'gatherings'];
+      pages.forEach(p => {
+        const el = document.getElementById(`page-${p}`);
+        if (el) el.classList.add('hidden');
+      });
+
+      // 좌측 사이드바 활성 클래스 정렬
+      const sidebar = document.getElementById('main-sidebar');
+      const headerProfile = document.getElementById('header-profile');
+
+      if (tabName === 'profile') {
+        sidebar.classList.add('hidden');
+        sidebar.classList.remove('md:flex');
+        headerProfile.classList.add('hidden');
+      } else {
+        sidebar.classList.remove('hidden');
+        sidebar.classList.add('md:flex');
+        headerProfile.classList.remove('hidden');
+      }
+
+      // 대상 화면 쇼잉
+      const targetEl = document.getElementById(`page-${tabName}`);
+      if (targetEl) targetEl.classList.remove('hidden');
+
+      // 사이드바 버튼 하이라이트 제어
+      const navButtons = ['home', 'chat-list', 'converter', 'gatherings'];
+      navButtons.forEach(btn => {
+        const el = document.getElementById(`nav-${btn}`);
+        if (!el) return;
+        if (btn === tabName || (btn === 'chat-list' && tabName === 'chat-room')) {
+          el.className = "w-full text-left py-2.5 px-4 rounded-xl flex items-center gap-3 transition-all text-amber-400 bg-slate-800/80 font-bold border-l-4 border-amber-500";
+        } else {
+          el.className = "w-full text-left py-2.5 px-4 rounded-xl flex items-center gap-3 transition-all text-slate-400 hover:text-slate-200 hover:bg-slate-900";
+        }
+      });
+    }
+
+    // -----------------------------------------
+    // 3. PROFILE ACTIONS
+    // -----------------------------------------
+    function generateRandomNickname() {
+      const randIdx = Math.floor(Math.random() * randomNicknames.length);
+      document.getElementById('input-nickname').value = randomNicknames[randIdx];
+      showToast("마음에 쏙 드는 정겨운 닉네임이네요..^^👍");
+    }
+
+    function selectInterest(type, label) {
+      userProfile.interest = type;
+      userProfile.interestLabel = label;
+
+      // 스타일 정리
+      const buttons = document.querySelectorAll('.interest-btn');
+      buttons.forEach(btn => {
+        btn.classList.remove('border-amber-500', 'bg-amber-500/10', 'text-amber-400');
+        btn.classList.add('border-slate-800', 'bg-slate-900', 'text-slate-300');
+      });
+
+      const activeBtn = document.getElementById(`interest-${type}`);
+      if (activeBtn) {
+        activeBtn.classList.remove('border-slate-800', 'bg-slate-900', 'text-slate-300');
+        activeBtn.classList.add('border-amber-500', 'bg-amber-500/10', 'text-amber-400');
+      }
+    }
+
+    function saveProfileAndStart() {
+      const inputNick = document.getElementById('input-nickname').value.trim();
+      if (!inputNick) {
+        showToast("오우,, 정겨운 닉네임을 먼저 설정해 주세요..^^");
+        return;
+      }
+      if (!userProfile.interest) {
+        showToast("취미 하나쯤은 가슴속에 품고 사셔야지요..^^ 관심사를 골라주세요!");
+        return;
+      }
+
+      userProfile.nickname = inputNick;
+
+      // 헤더 및 글로벌 유저 세션 갱신
+      document.getElementById('header-nickname').innerText = inputNick;
+      const emojiMap = { mountain: "⛰️", golf: "🏌️‍♂️", wine: "🍷", camping: "🏕️" };
+      document.getElementById('header-avatar-emoji').innerText = emojiMap[userProfile.interest] || "🏕️";
+
+      showToast("청춘의 온기가 가득한 낭만톡 소통 공간에 입장하셨습니다..^^");
+      navigate('home');
+    }
+
+    // -----------------------------------------
+    // 4. JUKEBOX LP CONTROLLER
+    // -----------------------------------------
+    function updateJukeboxUI() {
+      const track = jukeboxList[currentTrackIdx];
+      document.getElementById('now-playing-title').innerText = track.title;
+      const mobText = document.getElementById('mob-playing-text');
+      if (mobText) {
+        mobText.innerText = lpPlaying ? `재생 중: ${track.title}` : "90년대 명곡 라디오 (정지됨)";
+      }
+    }
+
+    function toggleMusic() {
+      lpPlaying = !lpPlaying;
+      const lpDisc = document.getElementById('lp-disc');
+      const lpPlayBtn = document.getElementById('lp-play-btn');
+      const note = document.getElementById('music-note');
+      const mobIcon = document.getElementById('mob-lp-icon');
+
+      if (lpPlaying) {
+        lpDisc.classList.remove('spinning-lp-paused');
+        lpPlayBtn.innerHTML = `<i class="fa-solid fa-pause"></i>`;
+        lpPlayBtn.classList.replace('bg-amber-500', 'bg-emerald-500');
+        if (note) note.style.display = 'block';
+        if (mobIcon) mobIcon.classList.add('animate-bounce');
+        showToast("라떼 시절 귓가를 울리던 감성 명곡이 깔립니다..^^📻");
+      } else {
+        lpDisc.classList.add('spinning-lp-paused');
+        lpPlayBtn.innerHTML = `<i class="fa-solid fa-play ml-0.5"></i>`;
+        lpPlayBtn.classList.replace('bg-emerald-500', 'bg-amber-500');
+        if (note) note.style.display = 'none';
+        if (mobIcon) mobIcon.classList.remove('animate-bounce');
+        showToast("잠시 명곡의 여운을 가라앉히는 중입니다..☕");
+      }
+      updateJukeboxUI();
+    }
+
+    function nextTrack() {
+      currentTrackIdx = (currentTrackIdx + 1) % jukeboxList.length;
+      updateJukeboxUI();
+      if (!lpPlaying) toggleMusic();
+      else showToast("다음 청춘 레코드로 교체했습니다..^^💿");
+    }
+
+    function prevTrack() {
+      currentTrackIdx = (currentTrackIdx - 1 + jukeboxList.length) % jukeboxList.length;
+      updateJukeboxUI();
+      if (!lpPlaying) toggleMusic();
+      else showToast("이전 추억의 레코드로 돌아갑니다..^^💿");
+    }
+
+    // -----------------------------------------
+    // 5. TRANSLATOR (말투 변환기)
+    // -----------------------------------------
+    function translateSpeech(style) {
+      const input = document.getElementById('convert-input').value.trim();
+      if (!input) {
+        showToast("변환하고 싶으신 무미건조한 문장을 먼저 입력해 주셔요..^^");
+        return;
+      }
+
+      let converted = "";
+
+      if (style === 'friendly') {
+        converted = `허허,, 보내주신 내용 귀담아 들었습니다..^^ 우리 ${userProfile.nickname || "인생 후배"}님 말씀도 어쩜 이렇게 고우실까~ 오다 가다 생각나시면 언제든 편하게 소식 전해주십시오. 오늘 남은 하루도 따뜻하고 활짝 웃는 얼굴로 힐링 가득하게 마무리하시길 바라겠습니다.. 기분 좋은 소중한 하루 보내시지요..!!👍☕`;
+      } else if (style === 'cheer') {
+        converted = `우왓~!! 이 소식 정말 가슴이 웅장해지는 아주 반갑고 짜릿한 희소식이네요~!! 아자아자!! 격하게 지지하고 대박 성공 기원 기 팍팍 들이붓습니다..✊ 힘든 일 있으셔도 어깨 쫙 펴고 힘차게 파이팅 외쳐보시지요!! 영차!! 영차!! 인생 뭐 있습니까~! 도전하는 젊음이 진짜 주인공입니다..^^!!🔥`;
+      } else if (style === 'wise') {
+        converted = `그 시절 우리가 꿈꾸던 찬란한 풍경이 머릿속에 아련히 스쳐갑니다... 그땐 그랬었지 하며 가끔은 따사로운 낙엽 쓸리는 차 한 잔과 함께 고요하게 사색을 즐겨보시는 건 어떨까요... 어지러운 세상 속 소박하지만 확실한 행복(소확행)을 찾으시는 온화한 발걸음을 진심으로 응원해 봅니다... 평안을 기원합니다..^^🍂`;
+      }
+
+      // 인풋 단어 조화 결합
+      const customIntro = `[소식] "${input}" 에 대답 올립니다..\n\n`;
+      document.getElementById('convert-output').innerText = customIntro + converted;
+      showToast("낭만이 뚝뚝 떨어지는 따스한 영포티 대화체로 리뉴얼 완료..^^✨");
+    }
+
+    function copyConvertedText() {
+      const text = document.getElementById('convert-output').innerText;
+      if (text.includes("위에서 옵션을 선택하시면")) return;
+
+      const dummy = document.createElement("textarea");
+      document.body.appendChild(dummy);
+      dummy.value = text;
+      dummy.select();
+      document.execCommand('copy');
+      document.body.removeChild(dummy);
+      showToast("클립보드에 따끈하게 복사 완료! 원하는 메신저에 편하게 붙여 넣어보셔요..^^👍");
+    }
+
+    // -----------------------------------------
+    // 6. CHAT ROOM ENGINE (AI 메이트와의 교류)
+    // -----------------------------------------
+    function startChatSession(mateKey) {
+      currentMate = mateKey;
+      const mData = chatMatesData[mateKey];
+      
+      document.getElementById('chatroom-mate-name').innerText = mData.name;
+      document.getElementById('chatroom-mate-status').innerText = "온라인 • 당신의 시그널 대기 중..^^";
+
+      navigate('chat-room');
+
+      // 히스토리 전무할 경우 첫 환영 인사말 세팅
+      if (chatHistories[mateKey].length === 0) {
+        chatHistories[mateKey].push({
+          role: "assistant",
+          text: mData.initialMsg
+        });
+      }
+
+      renderChatMessages();
+    }
+
+    function renderChatMessages() {
+      const box = document.getElementById('chat-messages-box');
+      box.innerHTML = "";
+
+      const history = chatHistories[currentMate];
+      const mData = chatMatesData[currentMate];
+
+      history.forEach(msg => {
+        const row = document.createElement('div');
+        row.className = "flex gap-3 items-start slide-in";
+
+        if (msg.role === 'assistant') {
+          row.innerHTML = `
+            <div class="w-9 h-9 rounded-full bg-slate-950 flex items-center justify-center text-lg border border-slate-800 flex-shrink-0">
+              ${mData.emoji}
+            </div>
+            <div class="bg-slate-950/80 p-3 rounded-2xl rounded-tl-none border border-slate-800 max-w-[80%] text-xs leading-relaxed text-slate-200">
+              <span class="block text-[10px] font-bold text-amber-500 mb-1">${mData.name}</span>
+              ${msg.text.replace(/\n/g, '<br>')}
+            </div>
+          `;
+        } else {
+          row.className = "flex gap-3 items-start justify-end slide-in";
+          row.innerHTML = `
+            <div class="bg-amber-500/10 p-3 rounded-2xl rounded-tr-none border border-amber-500/20 max-w-[80%] text-xs leading-relaxed text-slate-200">
+              <span class="block text-[10px] font-bold text-emerald-400 text-right mb-1">${userProfile.nickname || "인생_도전가"}</span>
+              ${msg.text}
+            </div>
+            <div class="w-9 h-9 rounded-full bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-lg border border-emerald-500/20 flex-shrink-0">
+              🏕️
+            </div>
+          `;
+        }
+        box.appendChild(row);
+      });
+
+      // 스크롤 하단 안착
+      box.scrollTop = box.scrollHeight;
+    }
+
+    function handleChatEnter(e) {
+      if (e.key === 'Enter') {
+        sendChatMessage();
+      }
+    }
+
+    // 인풋창 바로 옆 원클릭 영포티체 변환 간편단추
+    function convertInputToForty() {
+      const el = document.getElementById('chat-user-input');
+      const val = el.value.trim();
+      if (!val) {
+        showToast("메시지를 먼저 써보셔요..^^");
+        return;
+      }
+      const endings = ["~^^", "...ㅎㅎ", "👍☕", " 파이팅입니다~!!✊"];
+      const randEnding = endings[Math.floor(Math.random() * endings.length)];
+      el.value = `${val}${randEnding}`;
+      showToast("말끝에 영포티 낭만 한 스푼 처방 완료!^^");
+    }
+
+    // 아재 드립 개그 호출
+    function requestDripJoke() {
+      const mData = chatMatesData[currentMate];
+      const randDrip = mData.drips[Math.floor(Math.random() * mData.drips.length)];
+      
+      // 내역 추가 및 렌더링
+      chatHistories[currentMate].push({
+        role: "assistant",
+        text: randDrip
+      });
+      renderChatMessages();
+      showToast("낭만톡 메이트의 회심의 일격 썰렁 유머 대방출..^^");
+    }
+
+    // 대화 전송 및 AI 답변 도출
+    function sendChatMessage() {
+      const inputEl = document.getElementById('chat-user-input');
+      const text = inputEl.value.trim();
+      if (!text) return;
+
+      // 유저 메시지 갱신
+      chatHistories[currentMate].push({
+        role: "user",
+        text: text
+      });
+      renderChatMessages();
+      inputEl.value = "";
+
+      // 로딩 말풍선 전개
+      showChatLoadingBubble();
+
+      // Gemini AI 기반 낭만톡 API 통신 유도
+      fetchAIMateResponse(text);
+    }
+
+    function showChatLoadingBubble() {
+      const box = document.getElementById('chat-messages-box');
+      const loader = document.createElement('div');
+      loader.id = "chat-loading-bubble";
+      loader.className = "flex gap-3 items-start slide-in";
+      loader.innerHTML = `
+        <div class="w-9 h-9 rounded-full bg-slate-950 flex items-center justify-center text-lg border border-slate-800 flex-shrink-0 animate-pulse">
+          ⏳
+        </div>
+        <div class="bg-slate-950/80 p-3 rounded-2xl rounded-tl-none border border-slate-800 text-xs leading-relaxed text-slate-500">
+          <i class="fa-solid fa-spinner animate-spin mr-1.5 text-amber-500"></i> 답장을 고심하며 정성스레 손가락 타자 두드리는 중...
+        </div>
+      `;
+      box.appendChild(loader);
+      box.scrollTop = box.scrollHeight;
+    }
+
+    function removeChatLoadingBubble() {
+      const loader = document.getElementById('chat-loading-bubble');
+      if (loader) loader.remove();
+    }
+
+    async function fetchAIMateResponse(userQuery) {
+      const mData = chatMatesData[currentMate];
+      const systemPrompt = mData.systemPrompt + ` 대화 상대의 닉네임은 '${userProfile.nickname || "인생_도전가"}'이고 관심사는 '${userProfile.interestLabel}'이다. 이를 간간이 대화에 언급하여 친숙함을 과시해줘라.`;
+
+      // API Key 미정 상태인 경우 하이브리드 로컬 백업 자동 리액션 작동
+      if (!apiKey) {
+        setTimeout(() => {
+          removeChatLoadingBubble();
+          const backupResponses = [
+            `와핫~!! 역시 울 ${userProfile.nickname}님다운 명답이십니다!^^ 낭만적인 오후 시간에 가볍게 아이스 바닐라라떼 한 잔의 사치 어떠실까 싶네요..☕ 기운 팍팍 내서 남은 하루도 멋지게 나이스 샷~!! 하하!!`,
+            `허허,, 어쩜 이렇게 깊이 있는 말씀을 주시는지요... 참 가슴에 울림을 주십니다..ㅎㅎ 이런 저런 세상살이 이야기에 저도 가슴 깊이 공감하고 한 걸음 더 배워갑니다... 마음만은 언제나 활기찬 20대 청춘, 파이팅이 정답입니다..^^👍`,
+            `크으, 귀한 시간 내주셔서 좋은 말씀 공유해 주시니 마음 한구석이 훈훈하게 차오르는 듯합니다... 이래서 좋은 사람들과의 소소한 시그널이 인생의 큰 영양가인가 봅니다..^^ 주말 번개 등산에서도 꼭 얼굴 한번 뵈었으면 하네요! 즐거운 하루 기원합니다..!✊`
+          ];
+          const randAnswer = backupResponses[Math.floor(Math.random() * backupResponses.length)];
+          chatHistories[currentMate].push({
+            role: "assistant",
+            text: randAnswer
+          });
+          renderChatMessages();
+        }, 1200);
+        return;
+      }
+
+      // API 연동 Payload
+      const payload = {
+        contents: [{
+          parts: [{ text: userQuery }]
+        }],
+        systemInstruction: {
+          parts: [{ text: systemPrompt }]
+        }
+      };
+
+      // 지수 백오프 에러 처리 가동 (최대 5회)
+      let retries = 5;
+      let delay = 1000;
+      let success = false;
+      let aiResult = "";
+
+      while (retries > 0 && !success) {
+        try {
+          const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+
+          if (!response.ok) throw new Error(`Status ${response.status}`);
+
+          const data = await response.json();
+          aiResult = data.candidates?.[0]?.content?.parts?.[0]?.text || "어이쿠,, 잠시 기계에 기름칠할 때가 된 모양입니다.. 다시 한 번 가볍게 말 걸어주시지요~^^";
+          success = true;
+        } catch (err) {
+          retries--;
+          if (retries === 0) {
+            aiResult = "에구구,, 네트워크 통신에 잠시 안개 자욱한 번개가 친 모양입니다... 다시 한 번 정성 가득 담아 말을 전송해 보시지요..^^☕";
+          } else {
+            await new Promise(r => setTimeout(r, delay));
+            delay *= 2;
+          }
+        }
+      }
+
+      removeChatLoadingBubble();
+      chatHistories[currentMate].push({
+        role: "assistant",
+        text: aiResult
+      });
+      renderChatMessages();
+    }
+
+    // -----------------------------------------
+    // 7. GATHERINGS (소모임 번개 기능)
+    // -----------------------------------------
+    function openCreateGatheringModal() {
+      document.getElementById('modal-gathering').classList.remove('hidden');
+    }
+
+    function closeCreateGatheringModal() {
+      document.getElementById('modal-gathering').classList.add('hidden');
+    }
+
+    function submitNewGathering() {
+      const title = document.getElementById('g-title').value.trim();
+      const desc = document.getElementById('g-desc').value.trim();
+      const category = document.getElementById('g-category').value;
+
+      if (!title || !desc) {
+        showToast("빈칸 없이 채워주셔야 등반 번개 대원들이 찾아옵니다..^^");
+        return;
+      }
+
+      // 동적 번개 생성 주입
+      const listContainer = document.getElementById('gatherings-list-box');
+      const badgeColor = category === '산악회' ? 'bg-emerald-500/10 text-emerald-400' : 'bg-amber-500/10 text-amber-400';
+      const categoryLabel = category === '산악회' ? '주말 등산 산악회' : (category === '골프' ? '스크린 골프 동호회' : '감성 모임 번개');
+
+      const card = document.createElement('div');
+      card.className = "p-5 bg-slate-950/50 border border-emerald-500/20 rounded-2xl space-y-3.5 relative overflow-hidden slide-in";
+      card.innerHTML = `
+        <div class="flex justify-between items-start">
+          <span class="px-2.5 py-0.5 rounded-full ${badgeColor} border border-emerald-500/10 text-[10px] font-bold">${categoryLabel}</span>
+          <span class="text-xs text-slate-500"><i class="fa-solid fa-user-group mr-1"></i> 현재 1명 참가</span>
+        </div>
+        <div>
+          <h4 class="font-bold text-sm text-slate-100">${title}</h4>
+          <p class="text-xs text-slate-400 mt-1 leading-relaxed font-light">${desc}</p>
+        </div>
+        <div class="flex justify-between items-center pt-3 border-t border-slate-900">
+          <div class="text-[10px] text-slate-500">
+            <span class="text-amber-500 font-bold">주최:</span> ${userProfile.nickname || "인생_도전자"}
+          </div>
+          <button onclick="joinGathering(this, '${title}')" class="py-1.5 px-4 bg-amber-500 text-slate-950 text-xs font-bold rounded-lg hover:bg-amber-600 active:scale-95 transition-all">
+            참가 신청 <i class="fa-solid fa-check ml-0.5"></i>
+          </button>
+        </div>
+      `;
+
+      listContainer.prepend(card);
+      closeCreateGatheringModal();
+
+      // 인풋 청소
+      document.getElementById('g-title').value = "";
+      document.getElementById('g-desc').value = "";
+
+      showToast("나만의 낭만 가득한 소모임 번개가 청춘광장에 깃발을 꽂았습니다..^^🚩");
+    }
+
+    function joinGathering(btnEl, groupTitle) {
+      if (btnEl.innerText.includes("완료")) {
+        showToast("이미 동참 신청 완료되어 가방 싸두셨습니다.. 하하!^^");
+        return;
+      }
+      
+      btnEl.className = "py-1.5 px-4 bg-slate-800 text-emerald-400 border border-emerald-500/30 text-xs font-bold rounded-lg transition-all cursor-default";
+      btnEl.innerHTML = `신청 완료 <i class="fa-solid fa-circle-check ml-0.5"></i>`;
+
+      showToast(`'${groupTitle}' 참가 신청이 완료되었습니다! 오이 챙기시지요..^^🥒`);
+    }
+
+    // -----------------------------------------
+    // 8. GLOBAL UTILITY: TOAST
+    // -----------------------------------------
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      document.getElementById('toast-msg').innerText = message;
+      toast.classList.remove('translate-y-24', 'opacity-0');
+      toast.classList.add('translate-y-0', 'opacity-100');
+      
+      setTimeout(() => {
+        toast.classList.remove('translate-y-0', 'opacity-100');
+        toast.classList.add('translate-y-24', 'opacity-0');
+      }, 3000);
+    }
+  </script>
+</body>
+</html>
