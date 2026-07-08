@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>영포티 말투 판독기 & 튜닝 센터</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@300;400;700;900&family=Nanum+Myeongjo:wght@400;700;800&family=Sunflower:wght@300;500;700&display=swap" rel="stylesheet">
+  
+  <style>
+    body {
+      font-family: 'Gothic A1', sans-serif;
+      background-color: #090d16;
+      background-image: 
+        radial-gradient(circle at 10% 20%, rgba(16, 185, 129, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(245, 158, 11, 0.08) 0%, transparent 40%);
+    }
+
+    .font-classic {
+      font-family: 'Nanum Myeongjo', serif;
+    }
+
+    .font-retro {
+      font-family: 'Sunflower', sans-serif;
+    }
+
+    .neon-border-emerald {
+      box-shadow: 0 0 15px rgba(16, 185, 129, 0.3), inset 0 0 15px rgba(16, 185, 129, 0.15);
+    }
+
+    .neon-border-amber {
+      box-shadow: 0 0 15px rgba(245, 158, 11, 0.3), inset 0 0 15px rgba(245, 158, 11, 0.15);
+    }
+
+    /* 게이지 애니메이션 */
+    .gauge-path {
+      transition: stroke-dasharray 0.8s ease-in-out;
+    }
+
+    /* 페이드인 효과 */
+    .fade-in {
+      animation: fadeIn 0.5s ease-out forwards;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* 아날로그 노이즈 데코 */
+    .led-glow {
+      text-shadow: 0 0 8px rgba(16, 185, 129, 0.8);
+    }
+    .led-glow-amber {
+      text-shadow: 0 0 8px rgba(245, 158, 11, 0.8);
+    }
+  </style>
+</head>
+<body class="min-h-screen text-slate-100 flex flex-col justify-between overflow-x-hidden selection:bg-emerald-500 selection:text-slate-950">
+
+  <!-- ================= HEADER ================= -->
+  <header class="py-4 px-6 border-b border-slate-800 bg-slate-950/90 backdrop-blur-md sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto flex justify-between items-center">
+      <div class="flex items-center gap-3">
+        <span class="text-3xl filter drop-shadow-md">⚙️</span>
+        <div>
+          <h1 class="text-xl md:text-2xl font-retro font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-amber-400">
+            낭만 연구소
+          </h1>
+          <p class="text-[10px] text-emerald-400 font-bold tracking-widest uppercase">Young Forty Speech Analyzer & Tuner</p>
+        </div>
+      </div>
+      <div class="flex gap-2">
+        <span class="text-xs bg-slate-900 border border-slate-800 text-slate-400 px-3 py-1.5 rounded-full flex items-center gap-1.5">
+          <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span> 실시간 분석 가동 중
+        </span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ================= MAIN CONTAINER ================= -->
+  <main class="flex-grow flex items-center justify-center p-4 md:p-8">
+    <div class="w-full max-w-5xl bg-slate-900/60 backdrop-blur-xl rounded-3xl border border-slate-800/80 shadow-2xl overflow-hidden p-6 md:p-8 relative">
+      
+      <!-- 데코 백그라운드 구형 그라디언트 -->
+      <div class="absolute -top-16 -right-16 w-44 h-44 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute -bottom-16 -left-16 w-44 h-44 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+      <!-- 상단 인트로 -->
+      <div class="text-center max-w-2xl mx-auto mb-8">
+        <span class="bg-emerald-500/10 text-emerald-400 text-xs font-bold px-3 py-1 rounded-full border border-emerald-500/20 font-retro">
+          그 시절 낭만과 중년의 품격 스캐너
+        </span>
+        <h2 class="text-3xl md:text-4xl font-classic font-bold leading-tight mt-2 text-transparent bg-clip-text bg-gradient-to-r from-amber-100 via-amber-300 to-emerald-300">
+          영포티 말투 판독기 & 튜닝 센터
+        </h2>
+        <p class="text-xs md:text-sm text-slate-400 mt-2 font-light leading-relaxed">
+          내 카톡 메시지에 아재 냄새가 물씬 풍기진 않을까... 걱정되시나요? ^^<br>
+          재미 가득한 정밀 어휘 매크로 분석기로 낭만 점수를 체크해보세요!
+        </p>
+      </div>
+
+      <!-- 콘텐츠 핵심 레이아웃 -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+        
+        <!-- 왼쪽 입력부 & 조율툴 (7열) -->
+        <div class="lg:col-span-7 flex flex-col justify-between space-y-6">
+          
+          <!-- 텍스트 입력창 카드 -->
+          <div class="bg-slate-950/50 rounded-2xl border border-slate-800 p-5 relative overflow-hidden flex flex-col h-full">
+            <div class="flex justify-between items-center mb-3">
+              <span class="text-xs font-bold text-amber-400 flex items-center gap-1.5">
+                <i class="fa-solid fa-keyboard"></i> 분석할 메시지 입력하기
+              </span>
+              <button onclick="insertTemplate()" class="text-[10px] text-slate-400 hover:text-amber-300 border border-slate-800 hover:border-amber-500/30 bg-slate-900 px-2 py-1 rounded transition-all">
+                💡 아재 멘트 샘플 입력
+              </button>
+            </div>
+            
+            <textarea id="analyzer-input" oninput="liveCountWords()" placeholder="여기에 대화 내용을 적거나 붙여 넣어 보시지요...^^👍&#10;&#10;(예: '오늘 하루도 파이팅입니다! 다들 수고 많으셨습니다~^^')" class="w-full flex-grow h-48 bg-slate-900/80 border border-slate-800 focus:border-emerald-500 rounded-xl p-4 text-xs md:text-sm text-slate-100 outline-none resize-none transition-all"></textarea>
+            
+            <div class="flex justify-between items-center mt-3 text-[11px] text-slate-500">
+              <span id="char-counter">0자 입력됨 (공백 포함)</span>
+              <span>최소 5자 이상 권장 ☕</span>
+            </div>
+
+            <!-- 분석 버튼 -->
+            <button onclick="startAnalysis()" class="mt-4 w-full py-3.5 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-slate-950 font-bold text-sm rounded-xl shadow-lg shadow-emerald-500/10 active:scale-98 transition-all neon-border-emerald">
+              <i class="fa-solid fa-magnifying-glass-chart mr-1.5"></i> 말투 낭만 수치 정밀 판독하기
+            </button>
+          </div>
+
+          <!-- 말투 튜너/번역기 카드 -->
+          <div class="bg-slate-950/50 rounded-2xl border border-slate-800 p-5 space-y-4">
+            <span class="text-xs font-bold text-emerald-400 flex items-center gap-1.5">
+              <i class="fa-solid fa-wand-magic-sparkles"></i> 낭만 체인저 (말투 상호 튜닝 번역기)
+            </span>
+            <p class="text-[11px] text-slate-400">입력된 글씨체를 원하는 감성에 맞게 즉각 리빌딩합니다.</p>
+
+            <div class="grid grid-cols-2 gap-3">
+              <button onclick="tuneSpeech('fortify')" class="py-3 px-4 bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-amber-500/50 text-xs text-amber-400 font-bold rounded-xl flex items-center justify-center gap-1.5 transition-all">
+                🍷 영포티 낭만 풀충전
+              </button>
+              <button onclick="tuneSpeech('detox')" class="py-3 px-4 bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-emerald-500/50 text-xs text-emerald-400 font-bold rounded-xl flex items-center justify-center gap-1.5 transition-all">
+                🧪 무미건조 MZ체로 디톡스
+              </button>
+            </div>
+
+            <div id="tuner-result-container" class="hidden fade-in pt-3 border-t border-slate-900">
+              <div class="flex justify-between items-center mb-1.5">
+                <span class="text-[10px] text-slate-500 font-bold" id="tuner-result-label">✨ 변환 완벽 튜닝 결과</span>
+                <button onclick="copyTunedText()" class="text-[10px] text-amber-400 hover:text-amber-300 flex items-center gap-1">
+                  <i class="fa-solid fa-copy"></i> 복사하기
+                </button>
+              </div>
+              <div id="tuner-result-text" class="bg-slate-900 p-3.5 rounded-xl border border-emerald-500/20 text-xs text-slate-200 leading-relaxed font-medium whitespace-pre-wrap">
+                결과 노출 영역
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- 오른쪽 분석 리포트부 (5열) -->
+        <div class="lg:col-span-5">
+          <div class="bg-slate-950/70 rounded-2xl border border-slate-800 p-6 flex flex-col justify-between h-full relative" id="report-card">
+            
+            <!-- 분석 전 기본 오버레이 가이드 -->
+            <div id="report-empty-state" class="flex flex-col items-center justify-center text-center py-20 space-y-4">
+              <span class="text-5xl animate-bounce">🍷</span>
+              <h4 class="font-classic text-base font-bold text-slate-300">판독 결과 대기 중</h4>
+              <p class="text-xs text-slate-500 max-w-xs leading-relaxed font-light">
+                왼쪽 폼에 당신의 주간 카카오톡 대화방 복사본이나 안부 메시지를 입력하고 분석 단추를 터치해 주세요..^^☕
+              </p>
+            </div>
+
+            <!-- 로딩 화면 -->
+            <div id="report-loading-state" class="hidden flex-col items-center justify-center text-center py-20 space-y-4">
+              <div class="relative w-16 h-16">
+                <div class="absolute inset-0 rounded-full border-4 border-slate-800"></div>
+                <div class="absolute inset-0 rounded-full border-4 border-t-emerald-500 border-r-transparent border-b-transparent border-l-transparent animate-spin"></div>
+              </div>
+              <h4 class="font-retro text-sm text-emerald-400 font-bold animate-pulse">말장난 패턴 어휘망 가동 중..</h4>
+              <p class="text-[11px] text-slate-500 font-light">
+                물음표 개수와 미소 미모티콘 비율 추적 중...
+              </p>
+            </div>
+
+            <!-- 분석 결과 보고서 실제 영역 -->
+            <div id="report-content" class="hidden fade-in space-y-6">
+              
+              <!-- 아재지수 게이지 그래프 -->
+              <div class="flex flex-col items-center text-center">
+                <div class="relative w-40 h-40">
+                  <!-- SVG 원형 게이지 -->
+                  <svg class="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" r="40" stroke="#0f172a" stroke-width="8" fill="transparent"/>
+                    <circle id="gauge-progress" cx="50" cy="50" r="40" stroke="#10b981" stroke-width="8" stroke-dasharray="251.2" stroke-dashoffset="251.2" stroke-linecap="round" fill="transparent" class="gauge-path"/>
+                  </svg>
+                  <div class="absolute inset-0 flex flex-col items-center justify-center">
+                    <span id="score-percent" class="text-3xl font-retro font-bold text-amber-400 tracking-tighter led-glow-amber">
+                      0%
+                    </span>
+                    <span class="text-[9px] text-slate-500 font-bold uppercase tracking-widest mt-0.5">Young 40 Index</span>
+                  </div>
+                </div>
+
+                <div class="mt-4">
+                  <span id="report-badge" class="bg-amber-500/10 text-amber-400 text-xs font-title px-4 py-1.5 rounded-full border border-amber-500/20 font-bold">
+                    [등급] 낭만 새싹 삼십대
+                  </span>
+                </div>
+              </div>
+
+              <!-- 감지된 핵심 패턴 스코어링 -->
+              <div class="bg-slate-900/50 rounded-xl p-4 border border-slate-800/80 space-y-3">
+                <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider"><i class="fa-solid fa-chart-bar text-emerald-400 mr-1"></i> 검출 성향 일람표</h4>
+                
+                <div class="grid grid-cols-2 gap-3 text-xs">
+                  <div class="p-2.5 bg-slate-950/40 rounded-lg border border-slate-800/40">
+                    <p class="text-slate-500 text-[10px]">미소 이모티콘 (^^)</p>
+                    <p class="font-bold text-slate-200 mt-0.5" id="val-smile">0개 검출</p>
+                  </div>
+                  <div class="p-2.5 bg-slate-950/40 rounded-lg border border-slate-800/40">
+                    <p class="text-slate-500 text-[10px]">말줄임표 감성 (...)</p>
+                    <p class="font-bold text-slate-200 mt-0.5" id="val-dots">0개 검출</p>
+                  </div>
+                  <div class="p-2.5 bg-slate-950/40 rounded-lg border border-slate-800/40">
+                    <p class="text-slate-500 text-[10px]">격려 수치 (파이팅)</p>
+                    <p class="font-bold text-slate-200 mt-0.5" id="val-cheer">0회 발견</p>
+                  </div>
+                  <div class="p-2.5 bg-slate-950/40 rounded-lg border border-slate-800/40">
+                    <p class="text-slate-500 text-[10px]">인기 아재 이모지</p>
+                    <p class="font-bold text-slate-200 mt-0.5" id="val-emojis">0개 검출</p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 재미 팩폭 진단 한줄 요약 -->
+              <div class="bg-slate-900/50 rounded-xl p-4 border border-slate-800/80">
+                <h4 class="text-xs font-bold text-slate-400 mb-1.5 flex items-center gap-1.5">
+                  🚨 실시간 낭만 팩폭 처방전
+                </h4>
+                <p id="report-summary" class="text-xs text-slate-300 leading-relaxed font-light whitespace-pre-wrap">
+                  글을 분석하면 결과 리포트가 나옵니다.
+                </p>
+              </div>
+
+              <!-- AI 정밀 분석 팝업 버튼 -->
+              <div class="pt-2 border-t border-slate-900">
+                <button onclick="openAIConsulting()" class="w-full py-2.5 bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-emerald-500/50 text-slate-300 hover:text-white rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition-all">
+                  <i class="fa-solid fa-robot text-emerald-400"></i> AI 부장님에게 내 카톡 피드백 받기
+                </button>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ================= MODALS & TOASTS ================= -->
+
+  <!-- AI 카운셀링 모달 -->
+  <div id="ai-modal" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-50 flex items-center justify-center hidden p-4">
+    <div class="bg-slate-900 border border-slate-800 w-full max-w-lg rounded-3xl p-6 relative flex flex-col max-h-[85vh] fade-in">
+      <button onclick="closeAI()" class="absolute top-4 right-4 text-slate-400 hover:text-white text-xl">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <div class="flex items-center gap-2.5 mb-4">
+        <span class="text-3xl">☕</span>
+        <div>
+          <h4 class="font-retro text-base font-bold text-slate-100">낭만 AI 카운셀링</h4>
+          <p class="text-[10px] text-emerald-400 font-bold">인자한 부장님이 분석해주는 나이-값 어조 교정 서비스</p>
+        </div>
+      </div>
+
+      <!-- 스크롤 쳇박스 -->
+      <div id="ai-chat-box" class="flex-grow overflow-y-auto bg-slate-950/60 border border-slate-800 rounded-2xl p-4 text-xs text-slate-300 space-y-4 min-h-[250px] max-h-[400px]">
+        <div class="flex gap-2.5 items-start">
+          <div class="w-7 h-7 rounded-full bg-amber-500/10 text-amber-400 flex items-center justify-center text-xs flex-shrink-0 font-bold">부장</div>
+          <div class="bg-slate-900 p-3 rounded-2xl rounded-tl-none border border-slate-800/80 leading-relaxed max-w-[85%]">
+            어이쿠, 반갑습니다..^^ 우리 멋쟁이 인생 후배님! 🍁<br>
+            방금 보내주신 소중한 멘트를 면밀히 정밀 조감해 드리지요.. 귀에 피도 안 나고 뼈가 가득 녹아내리는 솔직 담백한 인생 꿀팁, 바로 확인해 보시지요.. 하하!!
+          </div>
+        </div>
+      </div>
+
+      <!-- 추천 프롬프트 퀵버튼 -->
+      <div class="mt-4 flex flex-wrap gap-2">
+        <button onclick="askPreset('roast')" class="text-[10px] bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-1.5 rounded-full border border-slate-700/60 transition-all">
+          🔥 내 말투가 꼰대 소리 듣기 쉬운가요? (정밀 팩폭)
+        </button>
+        <button onclick="askPreset('mz-tip')" class="text-[10px] bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-1.5 rounded-full border border-slate-700/60 transition-all">
+          📱 MZ 세대한테 안 읽씹 안 당하는 문자 작성 요령
+        </button>
+      </div>
+
+      <!-- 직접 입력창 -->
+      <div class="mt-4 flex gap-2">
+        <input type="text" id="ai-input" placeholder="인생 선배님께 여쭤보고 싶은 카톡 습관을 적어보셔요...^^" class="flex-grow bg-slate-950 border border-slate-800 focus:border-emerald-500 rounded-xl px-4 py-2.5 text-xs text-slate-200 outline-none transition-all">
+        <button onclick="sendUserQuery()" class="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-slate-950 font-bold px-4 py-2 rounded-xl text-xs flex items-center gap-1 transition-all">
+          상담 요청 <i class="fa-solid fa-paper-plane text-[10px]"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 알림 토스트 팝업 -->
+  <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 bg-slate-950/95 border border-slate-800 text-slate-100 py-3 px-6 rounded-full text-xs shadow-2xl flex items-center gap-2 transform translate-y-24 opacity-0 transition-all duration-300 z-50">
+    <span id="toast-icon">☕</span> <span id="toast-msg">카피 완료!</span>
+  </div>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="py-6 px-6 border-t border-slate-950 bg-slate-950/80 text-center text-[11px] text-slate-600">
+    <p class="mb-1">© 2026 낭만 연구소. 마음만큼은 언제나 이팔청춘인 님들과 함께합니다.</p>
+    <p>본 판독 결과는 웃음과 소소한 행복을 위한 과학적 뇌피셜 지표입니다..^^👍</p>
+  </footer>
+
+  <!-- ================= JAVASCRIPT LOGIC ================= -->
+  <script>
+    const appId = typeof __app_id !== 'undefined' ? __app_id : 'young-forty-speech-analyzer';
+    const apiKey = ""; // API Key
+
+    // 아재 말투 템플릿 샘플
+    const templates = [
+      "오늘도 수고 많으셨습니다...^^👍 주말엔 다들 상쾌하게 북한산 도보산행 가시는 건 어떨는지요.. 하하! 다들 일 마무리 잘들 하시고 맛점하시길 바랍니다..!!✊☕",
+      "와핫!! 이 소식 정말 가슴이 웅장해지는 레전드 소식이네요..ㅎㅎ 늘 인생 후배님의 앞날을 위해 격하게 격려하고 기도 보탭니다... 파이팅입니다~!!✊🍁",
+      "귀한 시간 내주셔서 감사합니다...^^ 날도 쌀쌀한데 따뜻한 둥굴레차 한잔 하시면서 고요히 여유 누려보셔요... 평안을 기원 올립니다...!!☕🍃",
+      "어이쿠,, 울 은지 과장님 벌써 대리님에서 승진 소식이.. 하하!! 축하하고 오늘 퇴근길에 가볍게 소주 한잔 사드릴 기회를 주시지요..^^👍🔥"
+    ];
+
+    function insertTemplate() {
+      const randIdx = Math.floor(Math.random() * templates.length);
+      document.getElementById('analyzer-input').value = templates[randIdx];
+      liveCountWords();
+      showToast("정겨운 영포티 명작 문장을 가져왔습니다..^^👍");
+    }
+
+    function liveCountWords() {
+      const val = document.getElementById('analyzer-input').value;
+      document.getElementById('char-counter').innerText = `${val.length}자 입력됨 (공백 포함)`;
+    }
+
+    function showToast(msg, icon = "☕") {
+      const toast = document.getElementById('toast');
+      document.getElementById('toast-msg').innerText = msg;
+      document.getElementById('toast-icon').innerText = icon;
+      toast.classList.remove('translate-y-24', 'opacity-0');
+      toast.classList.add('translate-y-0', 'opacity-100');
+
+      setTimeout(() => {
+        toast.classList.remove('translate-y-0', 'opacity-100');
+        toast.classList.add('translate-y-24', 'opacity-0');
+      }, 3000);
+    }
+
+    // -----------------------------------------
+    // CORE SPEECH ANALYSIS ENGINE (판독 로직)
+    // -----------------------------------------
+    function startAnalysis() {
+      const text = document.getElementById('analyzer-input').value.trim();
+      if (!text || text.length < 5) {
+        showToast("원활한 분석을 위해 최소 5자 이상 입력해 보셔요..^^", "⚠️");
+        return;
+      }
+
+      // 1. 로딩 가동
+      document.getElementById('report-empty-state').classList.add('hidden');
+      document.getElementById('report-content').classList.add('hidden');
+      document.getElementById('report-loading-state').classList.remove('hidden');
+
+      setTimeout(() => {
+        document.getElementById('report-loading-state').classList.add('hidden');
+        document.getElementById('report-content').classList.remove('hidden');
+        performAnalysis(text);
+      }, 1500);
+    }
+
+    function performAnalysis(text) {
+      // 키워드 매칭 분석 카운팅
+      
+      // A. 미소 이모티콘: ^^, ^.~, ^__^, ^오^ 등
+      const smileRegex = /\^{1,2}[._~]?[~^]?\^{1,2}|\^\^/g;
+      const smileCount = (text.match(smileRegex) || []).length;
+
+      // B. 말줄임표 감성: ..., ...., ..ㅎㅎ, ..허허, ..하하
+      const dotsRegex = /\.{2,}/g;
+      const dotsCount = (text.match(dotsRegex) || []).length;
+
+      // C. 파이팅 수치: 파이팅, 화이팅, 아자, 수고, 힘차게, 영차
+      const cheerRegex = /파이팅|화이팅|수고|영차|아자|힘차게|응원|파이팅입니다|수고들/g;
+      const cheerCount = (text.match(cheerRegex) || []).length;
+
+      // D. 이모지 점수: 👍, ☕, 🍷, 🏌️‍♂️, ⛰️, ✊, 🌸, 🍂, 🍁, 📻, ✍️, 💕, 🍃
+      const emojiRegex = /[👍☕🍷🏌️‍♂️⛰️✊🌸🍂🍁📻✍️💕🍃🌞]/g;
+      const emojiCount = (text.match(emojiRegex) || []).length;
+
+      // 점수 계산 (각 지표별 가중치 + 문자 길이 대비 가중치 적용)
+      let score = 0;
+      score += smileCount * 12;
+      score += dotsCount * 10;
+      score += cheerCount * 15;
+      score += emojiCount * 18;
+
+      // 호칭 분석 가중치 (선배, 부장, 후배, 님들, 다들, 오늘 하루, 식사 등)
+      const keywordRegex = /후배|선배|부장|대표|오늘도|식사|맛점|둥굴레차|커피|소주|인생|낭만|허허|하하|어이쿠|오우|수고들/g;
+      const keywordCount = (text.match(keywordRegex) || []).length;
+      score += keywordCount * 15;
+
+      // 문장의 평균 길이당 문장부호 비율 가중
+      if (text.endsWith('!!') || text.endsWith('..^^') || text.endsWith('..ㅎㅎ') || text.endsWith('👍') || text.endsWith('☕')) {
+        score += 15;
+      }
+
+      // 최대 스코어 100 보정
+      score = Math.min(Math.round(score), 100);
+
+      // 렌더링
+      updateGaugeScore(score);
+      
+      // 지표 바인딩
+      document.getElementById('val-smile').innerText = `${smileCount}개 감지`;
+      document.getElementById('val-dots').innerText = `${dotsCount}회 사용`;
+      document.getElementById('val-cheer').innerText = `${cheerCount}회 확인`;
+      document.getElementById('val-emojis').innerText = `${emojiCount}개 검출`;
+
+      // 스코어별 처방전 요약 분기
+      let badge = "";
+      let summary = "";
+
+      if (score <= 15) {
+        badge = "🤖 [0단계] 드라이 아웃 MZ 키보드 워리어";
+        summary = "온기가 전혀 느껴지지 않는 차가운 단답형 말투입니다. 혹시 AI 로봇이거나 단톡방 탈출을 노리는 신입사원이 아니신가요? 가끔 문장 끝에 물결(~)과 이모지 하나 정도는 섞어 주셔도 카카오톡의 온도가 따뜻해진답니다..^^";
+      } else if (score <= 45) {
+        badge = "🌱 [1단계] 풋풋한 삼십대 낭만 새싹";
+        summary = "감정이 풋풋하게 묻어나는 평범한 젊은 층의 문자입니다. 가끔 기분 좋은 일이나 격려할 때 '^^'이나 말줄임표(...)를 무의식적으로 섞어 쓰는 경향이 엿보입니다. 조금만 연마하면 아주 훌륭한 낭만파 신사/숙녀가 되실 소질이 충분합니다..!!✊";
+      } else if (score <= 75) {
+        badge = "🍷 [2단계] 찐 영포티! 대인관계 만렙 인싸";
+        summary = "완벽한 영포티 낭만파 말투에 등극하셨습니다! 👍 정겨움이 넘쳐나고 상대방의 기분까지 사르르 녹이는 마성의 어조를 자랑하십니다. 문장 끝의 미소짓기(^^) 신공과 정성 가득한 응원의 글귀는 언제나 조원들과 대원들의 사랑을 독차지하게 해줄 인생 비기입니다.. 허하하!!";
+      } else {
+        badge = "👑 [3단계] 부장님 클래스 / 레전드 낭만 대제";
+        summary = "대단하십니다...!! 걸어 다니는 90년대 미장센 그 자체이시군요..^^ 입만 떼시면 오이 한 가방 들고 주말 북한산 둘레길 정상에 온 듯 상쾌한 솔잎 향기가 흘러넘칩니다... 매사 정성이 극에 달해 대화 온도가 언제나 불타는 용광로급입니다... 오늘도 쉼 없이 파이팅하십시오..!!✊🔥";
+      }
+
+      document.getElementById('report-badge').innerText = badge;
+      document.getElementById('report-summary').innerText = summary;
+      showToast("메시지 판독 결과 분석서 출력이 마감되었습니다..^^", "📊");
+    }
+
+    function updateGaugeScore(score) {
+      const progressCircle = document.getElementById('gauge-progress');
+      // 원 둘레 공식 2 * pi * r = 2 * 3.14159 * 40 = 251.2
+      const maxOffset = 251.2;
+      const offset = maxOffset - (score / 100) * maxOffset;
+      
+      progressCircle.style.strokeDashoffset = offset;
+
+      // 텍스트 실시간 누적 카운팅 카운트업 효과
+      let currentVal = 0;
+      const step = Math.ceil(score / 30);
+      const timer = setInterval(() => {
+        currentVal += step;
+        if (currentVal >= score) {
+          currentVal = score;
+          clearInterval(timer);
+        }
+        document.getElementById('score-percent').innerText = `${currentVal}%`;
+      }, 30);
+    }
+
+    // -----------------------------------------
+    // 낭만 체인저 (말투 자동 변환 튜닝)
+    // -----------------------------------------
+    function tuneSpeech(mode) {
+      const input = document.getElementById('analyzer-input').value.trim();
+      if (!input) {
+        showToast("원래 말투를 먼저 상단에 적어주셔야 튜닝이 가동됩니다..^^", "⚠️");
+        return;
+      }
+
+      const resultContainer = document.getElementById('tuner-result-container');
+      const resultText = document.getElementById('tuner-result-text');
+      const resultLabel = document.getElementById('tuner-result-label');
+
+      resultContainer.classList.remove('hidden');
+
+      if (mode === 'fortify') {
+        resultLabel.innerText = "🍷 영포티 낭만 풀파워 튜닝";
+        // 영포티화 로직
+        let text = input;
+        // 단답형 제거
+        text = text.replace(/ㅇㅇ/g, "그렇지요..^^");
+        text = text.replace(/ㄴㄴ/g, "에구구,, 그건 좀 아쉬운데요...ㅎㅎ");
+        text = text.replace(/ㄱㄱ/g, "함께 시원하게 동참해보시지요..!!👍");
+        text = text.replace(/감사/g, "귀한 의견 감사 올립니다...^^");
+        text = text.replace(/수고/g, "오늘 하루도 너무 수고 많으셨습니다~!!✊");
+        
+        // 끝말 교정 및 이모지 풍성 주입
+        const suffixList = [
+          " 오늘도 파이팅 넘치게 힐링 가득하십시오..!!👍☕",
+          " 허하하! 다들 수고 많으셨습니다...^^",
+          " 귀한 소식에 가슴 따뜻해져서 응원 보태어 드립니다..^^🍂",
+          " 상쾌한 주말 골프 라운딩 한판 치시면서 여유 누려보셔요..^^⛳"
+        ];
+        const randomSuffix = suffixList[Math.floor(Math.random() * suffixList.length)];
+        
+        resultText.innerText = `[낭만전송] "${text}"\n\n${randomSuffix}`;
+        showToast("낭만이 가득 흐르는 친근한 중년 신사 풍으로 리모델링 완료..^^");
+      } else {
+        resultLabel.innerText = "🧪 무미건조 건조한 쿨 가이 MZ체 디톡스";
+        // 디톡스 로직 (온갖 아재 기교 제거)
+        let text = input;
+        text = text.replace(/\^{1,2}[._~]?[~^]?\^{1,2}|\^\^/g, ""); // ^^ 삭제
+        text = text.replace(/\.{2,}/g, "."); // 말줄임표 한 개로 압축
+        text = text.replace(/[👍☕🍷🏌️‍♂️⛰️✊🌸🍂🍁📻✍️💕🍃🌞]/g, ""); // 아재 이모지 처단
+        text = text.replace(/오늘도|수고|파이팅|화이팅|인생|청춘|둥굴레차/g, "");
+        text = text.replace(/하하|허허|허걱|에구구/g, "");
+        text = text.replace(/올립니다|드립니다|바랍니다|합니다/g, "함");
+        
+        resultText.innerText = text.trim() || "확인했습니다.";
+        showToast("불필요한 과도 온정을 말끔히 제거하여 차가운 MZ 단답체로 복원 완료.");
+      }
+    }
+
+    function copyTunedText() {
+      const val = document.getElementById('tuner-result-text').innerText;
+      
+      const dummy = document.createElement("textarea");
+      document.body.appendChild(dummy);
+      dummy.value = val;
+      dummy.select();
+      document.execCommand('copy');
+      document.body.removeChild(dummy);
+
+      showToast("클립보드에 깔끔하게 카피되었습니다!^^👍", "📋");
+    }
+
+    // -----------------------------------------
+    // AI 카운셀링 연동 (Gemini API 하이브리드)
+    // -----------------------------------------
+    function openAIConsulting() {
+      const input = document.getElementById('analyzer-input').value.trim();
+      if (!input) {
+        showToast("먼저 상단 분석 입력창에 당신의 카톡 구절을 기입해 주셔요..^^", "⚠️");
+        return;
+      }
+      document.getElementById('ai-modal').classList.remove('hidden');
+
+      // 챗 박스 첫 안부말 초기화
+      const chatBox = document.getElementById('ai-chat-box');
+      chatBox.innerHTML = `
+        <div class="flex gap-2.5 items-start">
+          <div class="w-7 h-7 rounded-full bg-amber-500/10 text-amber-400 flex items-center justify-center text-xs flex-shrink-0 font-bold">부장</div>
+          <div class="bg-slate-900 p-3 rounded-2xl rounded-tl-none border border-slate-800/80 leading-relaxed max-w-[85%]">
+            와하핫! 아주 명료하고 정성이 듬뿍 느껴지는 멋진 문장을 입력하셨더군요..^^<br>
+            당신이 기재해주신 문장: <em class="text-amber-300">"${input}"</em><br><br>
+            이 말투에 대해 인생 선배로서 피도 뼈도 되고 인자하게 조감해 드릴게요. 궁금한 처세술이나 안부 스킬을 아래 버튼을 터치해 들어보시지요..!!👍☕
+          </div>
+        </div>
+      `;
+    }
+
+    function closeAI() {
+      document.getElementById('ai-modal').classList.add('hidden');
+    }
+
+    function askPreset(type) {
+      const input = document.getElementById('analyzer-input').value.trim();
+      let query = "";
+
+      if (type === 'roast') {
+        query = `내가 입력한 말투 "${input}"의 아재 지수를 평가하고, 젊은 친구들이 이 어조를 봤을 때 뒤에서 어떻게 속닥거릴지 아주 뼈 때리면서도 인자하고 듬직하게 영포티 부장님 컨셉 말투(~^^, ...ㅎㅎ, 👍)로 카운셀링해 줘.`;
+      } else {
+        query = `내가 입력한 말투 "${input}"를 바탕으로 했을 때, 요즘 신조어나 MZ세대 친구들과 주간 단톡방에서 대화할 때 무시당하거나 안 읽씹을 피해 가고 친화력을 기가 막히게 발휘할 수 있는 실전 비결 딱 3가지만 부장님 컨셉(~^^, ...ㅎㅎ, 👍)으로 차근차근 전수해 주게나..^^`;
+      }
+
+      appendChatMsg('user', query);
+      callGeminiChat(query);
+    }
+
+    function sendUserQuery() {
+      const inputEl = document.getElementById('ai-input');
+      const val = inputEl.value.trim();
+      if (!val) return;
+
+      appendChatMsg('user', val);
+      inputEl.value = "";
+
+      const input = document.getElementById('analyzer-input').value.trim();
+      const prompt = `내가 분석중인 카톡 구절은 [${input}]입니다. 이에 대해 다음 요청 사항에 대하여 매우 인자하면서도 위트 넘치고 낭만 가득한 영포티 부장님 컨셉 말투(~^^, ...ㅎㅎ, 👍, ☕)로 진실되고 정성스럽게 피드백해 줘: "${val}"`;
+      
+      callGeminiChat(prompt);
+    }
+
+    function appendChatMsg(role, text) {
+      const chatBox = document.getElementById('ai-chat-box');
+      const row = document.createElement('div');
+      
+      if (role === 'user') {
+        row.className = "flex gap-2.5 items-start justify-end w-full";
+        row.innerHTML = `
+          <div class="bg-emerald-500/10 p-3 rounded-2xl rounded-tr-none border border-emerald-500/20 leading-relaxed max-w-[85%] text-slate-200">
+            ${text}
+          </div>
+          <div class="w-7 h-7 rounded-full bg-emerald-500 text-slate-950 flex items-center justify-center text-xs flex-shrink-0 font-bold">나</div>
+        `;
+      } else {
+        row.className = "flex gap-2.5 items-start";
+        row.innerHTML = `
+          <div class="w-7 h-7 rounded-full bg-amber-500/10 text-amber-400 flex items-center justify-center text-xs flex-shrink-0 font-bold font-retro">부장</div>
+          <div class="bg-slate-900 p-3 rounded-2xl rounded-tl-none border border-slate-800/80 leading-relaxed max-w-[85%]">
+            ${text.replace(/\n/g, '<br>')}
+          </div>
+        `;
+      }
+
+      chatBox.appendChild(row);
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    async function callGeminiChat(promptText) {
+      // 로더 배치
+      const chatBox = document.getElementById('ai-chat-box');
+      const loader = document.createElement('div');
+      loader.id = "ai-chat-loader";
+      loader.className = "flex gap-2.5 items-start";
+      loader.innerHTML = `
+        <div class="w-7 h-7 rounded-full bg-amber-500/10 text-amber-400 flex items-center justify-center text-xs flex-shrink-0 font-bold animate-pulse">부장</div>
+        <div class="bg-slate-900 p-3 rounded-2xl rounded-tl-none border border-slate-800/80 leading-relaxed text-slate-500">
+          <i class="fa-solid fa-spinner animate-spin mr-1.5 text-amber-500"></i> 따뜻한 안부 조언을 가슴 깊이 작당하며 독수리 타자 두드리는 중...☕
+        </div>
+      `;
+      chatBox.appendChild(loader);
+      chatBox.scrollTop = chatBox.scrollHeight;
+
+      const systemPrompt = "너는 40대 중반의 인자하고 낭만 가득한 대기업 '김민우 부장'이다. 질문자의 어투나 카톡 고민에 매우 친근하게 공감하면서도, 때로는 등산 오이를 건네듯 뼈 때리는 조언을 해준다. 말투 끝에는 반드시 '~^^', '...ㅎㅎ', '👍', '☕'를 풍성하게 사용하며, 무리한 존댓말과 정성 어린 반말을 적절히 오가며 대화 분위기를 아주 정겹게 연출해야 한다.";
+
+      // API 키 미제공 시 하이브리드 자동 가짜 답변 대응
+      if (!apiKey) {
+        setTimeout(() => {
+          loader.remove();
+          const mockReplies = [
+            `어이쿠, 귀한 질문에 대답 올립니다...^^ 요즘 젊은 친구들은 말이 참 짧더군요...ㅎㅎ 그렇지만 우리 가슴속 불꽃만큼은 늘 20대 청춘 아니겠습니까~? 낭만 넘치게 한 걸음 양보하고 안부 차 커피 이모지 하나 쓱 보내면 다들 활짝 미소 지을 겁니다..!! 파이팅입니다~👍☕`,
+            `하하하! 역시 울 영리하고 정감 어린 후배님답게 아주 깊이 있는 고찰을 하셨군요...^^ 꼰대 소리 듣지 않는 특효약은 간단합니다... 먼저 한 박자 쉬며 말을 들어주고, 기분 좋은 윙크 날려주시는 여유입니다... 오늘도 웃음꽃 가득 피어나시길..ㅎㅎ 🌸✊`,
+            `그 시절 우리가 카세트테이프에 꾹꾹 눌러 담던 러브레터 감성이 그립군요...^^ 상대가 안 읽씹 하더라도 상처받지 마시고, 쿨하게 맛있는 둥굴레차 한잔 하시며 힐링 타임 가져보세요... 인생 길게 보면 다 지나가는 아름다운 여정입니다..ㅎㅎ 화이팅~!!👍🍃`
+          ];
+          const randReply = mockReplies[Math.floor(Math.random() * mockReplies.length)];
+          appendChatMsg('ai', randReply);
+        }, 1200);
+        return;
+      }
+
+      // API Key가 유효할 경우 실제 Gemini 호출
+      const payload = {
+        contents: [{
+          parts: [{ text: promptText }]
+        }],
+        systemInstruction: {
+          parts: [{ text: systemPrompt }]
+        }
+      };
+
+      let retries = 5;
+      let delay = 1000;
+      let success = false;
+      let aiResult = "";
+
+      while (retries > 0 && !success) {
+        try {
+          const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+
+          if (!response.ok) throw new Error(`Status ${response.status}`);
+
+          const data = await response.json();
+          aiResult = data.candidates?.[0]?.content?.parts?.[0]?.text || "아쉽게도 부장님의 뇌 정지가 찾아왔군요...ㅎㅎ 다시 한 번 상쾌하게 등산 물 한 모금 마시고 물어보셔요..^^";
+          success = true;
+        } catch (err) {
+          retries--;
+          if (retries === 0) {
+            aiResult = "에구구,, 네트워크에 일시적인 비바람 안개가 가득 꼈나 봅니다...ㅎㅎ 차 한 잔 드시고 다시 한 번 질문 주시겠어요...^^";
+          } else {
+            await new Promise(r => setTimeout(r, delay));
+            delay *= 2;
+          }
+        }
+      }
+
+      loader.remove();
+      appendChatMsg('ai', aiResult);
+    }
+  </script>
+</body>
+</html>
